@@ -4,10 +4,13 @@ import matplotlib as mpl
 mpl.use('Agg')
 import matplotlib.pyplot as plt
 import datetime
-import os
+import os, random
+import graph_nn2_tf2_v2 as graph_nn
+from graph_nn2_tf2_v2 import parser as gparser
 
-import graph_nn2_tf2 as graph_nn
-from graph_nn2_tf2 import parser as gparser
+random.seed(0)
+np.random.seed(0)
+
 gparser.add_argument('--nval', type=int, default=32)
 gparser.add_argument('--checkpoint', type=int, default=None)
 args = gparser.parse_args()
@@ -24,6 +27,7 @@ def main():
     REUSE=None
     g = tf.Graph()
     with g.as_default():
+        tf.compat.v1.set_random_seed(0)
         global_step = tf.compat.v1.train.get_or_create_global_step()
 
         batch, labels = make_set()   
@@ -31,7 +35,8 @@ def main():
         predictions = model(batch, training=False)
 
         loss = tf.compat.v1.losses.mean_squared_error(labels, predictions)
-        saver = tf.compat.v1.train.Saver(list(model.variables) + [global_step])
+        # saver = tf.compat.v1.train.Saver(list(model.variables) + [global_step])
+        saver = tf.compat.v1.train.Saver(tf.compat.v1.global_variables())
 
     with tf.compat.v1.Session(graph=g) as ses:
         ses.run(tf.compat.v1.local_variables_initializer())
