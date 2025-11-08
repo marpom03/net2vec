@@ -62,7 +62,6 @@ class SNDLib(GraphProvider):
         # self.sndlib_networks = {os.path.split(f)[1][0:-8]:nx.read_graphml(f) for f in flist}
         self.sndlib_networks = {os.path.split(f)[1][0:-4]:read_sndlib_xml(f) for f in flist}
         
-        # UPC hack
         # self.sndlib_networks = {k:v for k,v in self.sndlib_networks.items() if len(v) < 38 and len(v) > 19}
         self.names = list(self.sndlib_networks.keys())
         print(self.names)
@@ -79,7 +78,6 @@ def make_sample(provider, rl=0.3, rh=0.7):
     #A=nx.convert_matrix.to_numpy_matrix(Gm)
     A=nx.convert_matrix.to_numpy_array(Gm)          
 
-    # Make all intensities addup to 1
     L=np.random.uniform(size=(len(Gm),1))       
     L = L /np.sum(L)
 
