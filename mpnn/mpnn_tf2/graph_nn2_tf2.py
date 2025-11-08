@@ -15,7 +15,7 @@ parser.add_argument('--batch_size', help='batch_size',  type=int, default=64)
 parser.add_argument('--lr', help='learning rate',  type=float, default=0.001)
 parser.add_argument('--log_dir', help='log dir',  type=str, default='log')              
 parser.add_argument('--rn', help='number of readout neurons',  type=int, default=8)     
-parser.add_argument('--buf', help='buffer',  type=int, default=200)                     
+parser.add_argument('--buf', help='buffer',  type=int, default=200)                    
 parser.add_argument('-I', help='number of iteration',  type=int, default=80000)         
 parser.add_argument('--eval', help='evaluatioin file',  type=str, default='eval.tfrecords')
 parser.add_argument('--train', help='train file',  type=str, default='train.tfrecords')
@@ -45,15 +45,15 @@ else:
     args = parser.parse_args([])
 
 
+
 def test():
     return args.I
 
-N_PAD=args.pad
-N_PAS=args.pas
+N_PAD=args.pad  
+N_PAS=args.pas  
 N_H=2+N_PAD     
-REUSE=None     
+REUSE=None      
 batch_size=args.batch_size
-
 
 
 def parse(serialized):
@@ -74,24 +74,25 @@ def parse(serialized):
                     "first":tf.io.VarLenFeature(tf.int64),
                     "second":tf.io.VarLenFeature(tf.int64)})
 
+          
 
+            # ar=[(tf.sparse_tensor_to_dense(features['mu'])-args.mu_shift)/args.mu_scale,   
+            #         (tf.sparse_tensor_to_dense(features['Lambda']))]                       
 
             ar=[(tf.sparse.to_dense(features['mu'])-args.mu_shift)/args.mu_scale,   
                      (tf.sparse.to_dense(features['Lambda']))] 
-      
-            x=tf.stack(ar,axis=1)   
+            
+
+            x=tf.stack(ar,axis=1)
 
             # e=tf.sparse_tensor_to_dense(features['R'])
-            e=tf.sparse.to_dense(features['R'])
-     
-            #e = (tf.expand_dims(e,axis=1)-0.24)/0.09
-
-            e = tf.expand_dims(e,axis=1)
+            e=tf.sparse.to_dense(features['R'])    
+ 
+            e = tf.expand_dims(e,axis=1)    
 
             # first=tf.sparse_tensor_to_dense(features['first'])
             # second=tf.sparse_tensor_to_dense(features['second'])
-            
-            first=tf.sparse.to_dense(features['first'])
+            first=tf.sparse.to_dense(features['first'])             
             second=tf.sparse.to_dense(features['second'])
 
             W = (features['W']-args.W_shift)/args.W_scale   
@@ -102,13 +103,10 @@ def parse(serialized):
 def cummax(alist, extractor):
     with tf.name_scope('cummax'):
 
-       
         maxes = [tf.reduce_max( extractor(v) ) + 1 for v in alist ]
 
-      
         cummaxes = [tf.zeros_like(maxes[0])]
 
-      
         for i in range(len(maxes)-1):
             cummaxes.append( tf.math.add_n(maxes[0:i+1]))
     
@@ -116,15 +114,11 @@ def cummax(alist, extractor):
 
 
 
-
-
-
-def transformation_func(it, batch_size=4):                
+def transformation_func(it, batch_size=4):                  
     with tf.name_scope("transformation_func"):
         vs = [it.get_next() for _ in range(batch_size)]    
         first_offset = cummax(vs,lambda v:v[0][2] )         
         second_offset = cummax(vs,lambda v:v[0][3] )        
-        
     
     return ((tf.concat([v[0][0] for v in vs], axis=0),
            tf.concat([v[0][1] for v in vs], axis=0),
@@ -136,11 +130,12 @@ def transformation_func(it, batch_size=4):
            )
 
 def make_set():
-    ds = tf.data.TFRecordDataset([args.eval])                                        
-    ds = ds.map(parse)                          
-    ds = ds.apply(tf.data.experimental.shuffle_and_repeat(args.buf))                                                            
-    # it = ds.make_one_shot_iterator()                                   
-    it = tf.compat.v1.data.make_one_shot_iterator(ds)
+    ds = tf.data.TFRecordDataset([args.eval])  
+    ds = ds.map(parse)                         
+    ds = ds.apply(tf.data.experimental.shuffle_and_repeat(args.buf))  
+
+    # it = ds.make_one_shot_iterator()                             
+    it = tf.compat.v1.data.make_one_shot_iterator(ds)                   
     with tf.device("/cpu:0"):
         return transformation_func(it, args.batch_size)
 
@@ -156,6 +151,7 @@ def make_trainset():
 def make_testset():
     ds = tf.data.TFRecordDataset([args.test])
     ds = ds.map(parse)
+    ds = ds.apply(tf.data.experimental.shuffle_and_repeat(args.buf))
     it = tf.compat.v1.data.make_one_shot_iterator(ds)
     with tf.device("/cpu:0"):
         return transformation_func(it, args.batch_size)
@@ -170,9 +166,9 @@ def line_1(x1,x2):
 
 
 
-
-def fitquality (y,f):
-    '''
+def fitquality (y,f):      
+                           
+    '''                     
     Computes $R^2$
     Args:
         x true label
@@ -182,7 +178,7 @@ def fitquality (y,f):
     #return r[0,1]
     #R2 = 1-np.var(f-y)/np.var(y)
     ssres=np.sum((y-f)**2)                 
-    sstot=np.sum( (y-np.mean(y))**2 )       
+    sstot=np.sum( (y-np.mean(y))**2 )      
     R2 = 1-ssres/sstot
 
     return R2
@@ -226,7 +222,7 @@ class MessagePassing(tf.keras.Model):
         self.u.build(tf.TensorShape([None, N_H]))
         self.i.build(tf.TensorShape([None, N_H+2]))
         self.j.build(tf.TensorShape([None, N_H+2]))
-        self.j.build(tf.TensorShape([None, args.rn]))
+        # self.j.build(tf.TensorShape([None, args.rn]))
 
         self.built = True
         
@@ -270,21 +266,20 @@ if __name__== "__main__":
     g=tf.Graph()
 
     with g.as_default():
+        tf.compat.v1.set_random_seed(1234)  
+
         # global_step = tf.train.get_or_create_global_step()      
         global_step = tf.compat.v1.train.get_or_create_global_step()  
-                                                              
 
         ((x,e,first,second,segment),W)=make_trainset()
-
         model = MessagePassing()
-
         predictions = model((x,e,first,second,segment),training=True)
         labels=W
         # loss= tf.losses.mean_squared_error(W,predictions)  
         loss = tf.compat.v1.losses.mean_squared_error(W, predictions)      
-        rel = tf.reduce_mean(tf.abs( (labels-predictions)/labels) )   
+        rel = tf.reduce_mean(tf.abs( (labels-predictions)/labels) )     
 
-        trainables = model.variables
+        trainables = model.variables    
         grads = tf.gradients(loss, trainables)
         grad_var_pairs = zip(grads, trainables)
         
@@ -294,8 +289,10 @@ if __name__== "__main__":
         # #summaries.append(tf.summary.scalar('train_relative_absolute_error', rel)) 
         # summary_op = tf.summary.merge(summaries)
 
-        summaries = [tf.compat.v1.summary.histogram(var.op.name, var) for var in trainables]
-        summaries += [tf.compat.v1.summary.histogram(g.op.name, g) for g in grads if g is not None]
+        # summaries = [tf.compat.v1.summary.histogram(var.op.name, var) for var in trainables]
+        summaries = [tf.compat.v1.summary.histogram(var.name, var) for var in trainables]
+        # summaries += [tf.compat.v1.summary.histogram(g.op.name, g) for g in grads if g is not None]
+        summaries += [tf.compat.v1.summary.histogram(g.name, g) for g in grads if g is not None]
         summaries.append(tf.compat.v1.summary.scalar('train_mse', loss))
         summary_op = tf.compat.v1.summary.merge(summaries)
 
@@ -322,13 +319,13 @@ if __name__== "__main__":
         test_summaries.append(tf.compat.v1.summary.scalar('test_mse', tf.reduce_mean((test_labels - test_predictions)**2)))
         test_summary_op = tf.compat.v1.summary.merge(test_summaries)    
         
-        saver = tf.compat.v1.train.Saver(trainables + [global_step])
+        # saver = tf.compat.v1.train.Saver(trainables + [global_step])
+        saver = tf.compat.v1.train.Saver(tf.compat.v1.global_variables(), max_to_keep=50)
 
 
     with tf.compat.v1.Session(graph=g) as ses:                    
         ses.run(tf.compat.v1.local_variables_initializer())       
         ses.run(tf.compat.v1.global_variables_initializer())      
-
 
 
         ckpt=tf.train.latest_checkpoint(args.log_dir)
@@ -338,13 +335,11 @@ if __name__== "__main__":
             saver.restore(ses, ckpt)
 
 
-
         # writer=tf.summary.FileWriter(args.log_dir, ses.graph)
-
         writer = tf.compat.v1.summary.FileWriter(args.log_dir, ses.graph)
 
 
-        #  
+        
 
         for i in range(args.I):
             _,mse_loss,summary_py, step = ses.run([train,loss,summary_op, global_step])
