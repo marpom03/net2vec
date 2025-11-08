@@ -291,59 +291,49 @@ The following tables compare the benchmark results from the original TF1 noteboo
 
 #### BA Model Evaluation Logs
 
+Jasne, oto dane sformatowane zgodnie z Twoim przykładem:
+
+#### BA Model Evaluation Logs
+
 ```bash
 # Test BA / BA 
 python eval_tf2.py --log_dir log/ba16_tf2 --eval eval.tfrecords \
   --W-shift 55.3 --W-scale 22.0 --mu-shift 0.34 --mu-scale 0.27
-
-Loading checkpoint: log/ba16_tf2/model.ckpt-197400
-2025-11-07 21:37:14.758732 step: 197401 mse: 0.006050325930118561 R**2: 0.9939349889755249 Pearson: 0.9978631134696547
 ```
 
-
+`2025-11-07 21:37:14.758732 step: 197401 mse: 0.006050325930118561 R**2: 0.9939349889755249 Pearson: 0.9978631134696547`
 
 ```bash
 # Test BA / ER 
 python eval_tf2.py --log_dir log/ba16_tf2 --eval eval_er.tfrecords \
   --W-shift 55.3 --W-scale 22.0 --mu-shift 0.34 --mu-scale 0.27
-
-Loading checkpoint: log/ba16_tf2/model.ckpt-197400
-2025-11-07 21:38:49.271734 step: 197401 mse: 12.430560111999512 R**2: -21.63809585571289 Pearson: 0.8499421599026573
 ```
 
-
+`2025-11-07 21:38:49.271734 step: 197401 mse: 12.430560111999512 R**2: -21.63809585571289 Pearson: 0.8499421599026573`
 
 ```bash
 # Test BA / ER 60 
 python eval_tf2.py --log_dir log/ba16_tf2 --eval eval_er60.tfrecords \
   --W-shift 55.3 --W-scale 22.0 --mu-shift 0.34 --mu-scale 0.27
-
-Loading checkpoint: log/ba16_tf2/model.ckpt-197400
-2025-11-07 21:40:34.788611 step: 197401 mse: 29.3680419921875 R**2: -34.647945404052734 Pearson: 0.8544042875615532
 ```
 
-
+`2025-11-07 21:40:34.788611 step: 197401 mse: 29.3680419921875 R**2: -34.647945404052734 Pearson: 0.8544042875615532`
 
 ```bash
 # Test BA / SNDLib 
 python eval_tf2.py --log_dir log/ba16_tf2 --eval eval_snd_2038.tfrecords \
   --W-shift 55.3 --W-scale 22.0 --mu-shift 0.34 --mu-scale 0.27 --checkpoint 197400
-
-Loading checkpoint: log/ba16_tf2/model.ckpt-197400
-2025-11-08 13:20:01.841543 step: 197401 mse: 1.2138633728027344 R**2: -5.47258186340332 Pearson: 0.9829135695250071
 ```
 
-
+`2025-11-08 13:20:01.841543 step: 197401 mse: 1.2138633728027344 R**2: -5.47258186340332 Pearson: 0.9829135695250071`
 
 ```bash
 # Test BA / germany50 
 python eval_tf2.py --log_dir log/ba16_tf2 --eval eval_snd_germany50.tfrecords \
   --W-shift 55.3 --W-scale 22.0 --mu-shift 0.34 --mu-scale 0.27 --checkpoint 197400
-
-Loading checkpoint: log/ba16_tf2/model.ckpt-197400
-2025-11-08 13:20:25.938886 step: 197401 mse: 1.748425841331482 R**2: -3.238605499267578 Pearson: 0.9711106107485709
 ```
 
+`2025-11-08 13:20:25.938886 step: 197401 mse: 1.748425841331482 R**2: -3.238605499267578 Pearson: 0.9711106107485709`
 
 
 ### 2\. ER Model Evaluation (Checkpoint 198000)
