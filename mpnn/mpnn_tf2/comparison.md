@@ -278,9 +278,9 @@ The following tables compare the benchmark results from the original TF1 noteboo
 | `eval_er.tfrecords` | **BA / ER** | MSE | 11.5073 | 12.4305 |
 | | | **R²** | **-20.2154** | **-21.6380** |
 | | | Pearson ρ | 0.8631 | 0.8499 |
-| `eval_er60.tfrecords` | **BA / ER 60** | MSE | N/A | 29.3680 |
-| | | **R²** | N/A | **-34.6479** |
-| | | Pearson ρ | N/A | 0.8544 |
+| `eval_er60.tfrecords` | **BA / ER (ER statistics)** | MSE | 9.0614 | 41.9479 |
+| | | **R²** | -7.8326 | **-39.1546** |
+| | | Pearson ρ | 0.7191 | 0.6414 |
 | `eval_snd_2038.tfrecords` | **BA / SNDLib (mix)** | MSE | 1.4945 | 1.2138 |
 | | | **R²** | **-2.3634** | **-5.4725** |
 | | | Pearson ρ | 0.5122 | 0.9829 |
@@ -312,17 +312,17 @@ python eval_tf2.py --log_dir log/ba16_tf2 --eval eval_er.tfrecords \
 `2025-11-07 21:38:49.271734 step: 197401 mse: 12.430560111999512 R**2: -21.63809585571289 Pearson: 0.8499421599026573`
 
 ```bash
-# Test BA / ER 60 
-python eval_tf2.py --log_dir log/ba16_tf2 --eval eval_er60.tfrecords \
-  --W-shift 55.3 --W-scale 22.0 --mu-shift 0.34 --mu-scale 0.27
+# Test BA / ER (ER statistics) 
+python eval_tf2.py --log_dir log/ba16_tf2 --eval eval_er.tfrecords \
+  --W-shift 69.3 --W-scale 15.95 --mu-shift 0.199 --mu-scale 0.12 
 ```
 
-`2025-11-07 21:40:34.788611 step: 197401 mse: 29.3680419921875 R**2: -34.647945404052734 Pearson: 0.8544042875615532`
+`2025-11-08 19:16:38.214018 step: 197401 mse: 41.947940826416016 R**2: -39.15464782714844 Pearson: 0.641409607453491`
 
 ```bash
 # Test BA / SNDLib 
 python eval_tf2.py --log_dir log/ba16_tf2 --eval eval_snd_2038.tfrecords \
-  --W-shift 55.3 --W-scale 22.0 --mu-shift 0.34 --mu-scale 0.27 --checkpoint 197400
+  --W-shift 55.3 --W-scale 22.0 --mu-shift 0.34 --mu-scale 0.27 
 ```
 
 `2025-11-08 13:20:01.841543 step: 197401 mse: 1.2138633728027344 R**2: -5.47258186340332 Pearson: 0.9829135695250071`
@@ -330,7 +330,7 @@ python eval_tf2.py --log_dir log/ba16_tf2 --eval eval_snd_2038.tfrecords \
 ```bash
 # Test BA / germany50 
 python eval_tf2.py --log_dir log/ba16_tf2 --eval eval_snd_germany50.tfrecords \
-  --W-shift 55.3 --W-scale 22.0 --mu-shift 0.34 --mu-scale 0.27 --checkpoint 197400
+  --W-shift 55.3 --W-scale 22.0 --mu-shift 0.34 --mu-scale 0.27 
 ```
 
 `2025-11-08 13:20:25.938886 step: 197401 mse: 1.748425841331482 R**2: -3.238605499267578 Pearson: 0.9711106107485709`
@@ -373,7 +373,7 @@ python eval_tf2.py --log_dir log/ba16_tf2 --eval eval_snd_germany50.tfrecords \
 ```bash
 # Test ER / ER 
 python eval_tf2.py --log_dir log/er3_tf2 --eval eval_er.tfrecords \
-  --W-shift 69.3 --W-scale 15.95 --mu-shift 0.199 --mu-scale 0.12 --checkpoint 198000
+  --W-shift 69.3 --W-scale 15.95 --mu-shift 0.199 --mu-scale 0.12 
 ```
 
 
@@ -382,7 +382,7 @@ python eval_tf2.py --log_dir log/er3_tf2 --eval eval_er.tfrecords \
 ```bash
 # Test ER / BA 
 python eval_tf2.py --log_dir log/er3_tf2 --eval eval.tfrecords \
-  --W-shift 69.3 --W-scale 15.95 --mu-shift 0.199 --mu-scale 0.12 --checkpoint 198000
+  --W-shift 69.3 --W-scale 15.95 --mu-shift 0.199 --mu-scale 0.12 
 ```
 
 
@@ -391,7 +391,7 @@ python eval_tf2.py --log_dir log/er3_tf2 --eval eval.tfrecords \
 ```bash
 # Test ER / ER 60 
 python eval_tf2.py --log_dir log/er3_tf2 --eval eval_er60.tfrecords \
-  --W-shift 69.3 --W-scale 15.95 --mu-shift 0.199 --mu-scale 0.12 --checkpoint 198000
+  --W-shift 69.3 --W-scale 15.95 --mu-shift 0.199 --mu-scale 0.12 
 ```
 
 
@@ -400,7 +400,7 @@ python eval_tf2.py --log_dir log/er3_tf2 --eval eval_er60.tfrecords \
 ```bash
 # Test ER / SNDLib 
 python eval_tf2.py --log_dir log/er3_tf2 --eval eval_snd_2038.tfrecords \
-  --W-shift 69.3 --W-scale 15.95 --mu-shift 0.199 --mu-scale 0.12 --checkpoint 198000
+  --W-shift 69.3 --W-scale 15.95 --mu-shift 0.199 --mu-scale 0.12 
 ```
 
 
@@ -409,7 +409,7 @@ python eval_tf2.py --log_dir log/er3_tf2 --eval eval_snd_2038.tfrecords \
 ```bash
 # Test ER / janos-us 
 python eval_tf2.py --log_dir log/er3_tf2 --eval eval_snd_janos-us.tfrecords \
-  --W-shift 69.3 --W-scale 15.95 --mu-shift 0.199 --mu-scale 0.12 --checkpoint 198000
+  --W-shift 69.3 --W-scale 15.95 --mu-shift 0.199 --mu-scale 0.12 
 ```
 
 
@@ -418,7 +418,7 @@ python eval_tf2.py --log_dir log/er3_tf2 --eval eval_snd_janos-us.tfrecords \
 ```bash
 # Test ER / janos-us-ca 
 python eval_tf2.py --log_dir log/er3_tf2 --eval eval_snd_janos-us-ca.tfrecords \
-  --W-shift 69.3 --W-scale 15.95 --mu-shift 0.199 --mu-scale 0.12 --checkpoint 198000
+  --W-shift 69.3 --W-scale 15.95 --mu-shift 0.199 --mu-scale 0.12 
 ```
 
 
@@ -427,7 +427,7 @@ python eval_tf2.py --log_dir log/er3_tf2 --eval eval_snd_janos-us-ca.tfrecords \
 ```bash
 # Test ER / cost266 
 python eval_tf2.py --log_dir log/er3_tf2 --eval eval_snd_cost266.tfrecords \
-  --W-shift 69.3 --W-scale 15.95 --mu-shift 0.199 --mu-scale 0.12 --checkpoint 198000
+  --W-shift 69.3 --W-scale 15.95 --mu-shift 0.199 --mu-scale 0.12 
 ```
 
 
@@ -436,7 +436,7 @@ python eval_tf2.py --log_dir log/er3_tf2 --eval eval_snd_cost266.tfrecords \
 ```bash
 # Test ER / germany50 
 python eval_tf2.py --log_dir log/er3_tf2 --eval eval_snd_germany50.tfrecords \
-  --W-shift 69.3 --W-scale 15.95 --mu-shift 0.199 --mu-scale 0.12 --checkpoint 198000
+  --W-shift 69.3 --W-scale 15.95 --mu-shift 0.199 --mu-scale 0.12 
 ```
 
 
