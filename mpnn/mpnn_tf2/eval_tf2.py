@@ -5,8 +5,8 @@ mpl.use('Agg')
 import matplotlib.pyplot as plt
 import datetime
 import os, random
-import graph_nn2_tf2_v2 as graph_nn
-from graph_nn2_tf2_v2 import parser as gparser
+import graph_nn2_tf2 as graph_nn
+from graph_nn2_tf2 import parser as gparser
 
 random.seed(0)
 np.random.seed(0)
