@@ -278,7 +278,7 @@ The following tables compare the benchmark results from the original TF1 noteboo
 | `eval_er.tfrecords` | **BA / ER** | MSE | 11.5073 | 12.4305 |
 | | | **R²** | **-20.2154** | **-21.6380** |
 | | | Pearson ρ | 0.8631 | 0.8499 |
-| `eval_er60.tfrecords` | **BA / ER (ER statistics)** | MSE | 9.0614 | 41.9479 |
+| `eval_er60.tfrecords` | **BA / ER (ER Stats)** | MSE | 9.0614 | 41.9479 |
 | | | **R²** | **-7.8326** | **-39.1546** |
 | | | Pearson ρ | 0.7191 | 0.6414 |
 | `eval_snd_2038.tfrecords` | **BA / SNDLib (mix)** | MSE | 1.4945 | 1.2138 |
@@ -312,7 +312,7 @@ python eval_tf2.py --log_dir log/ba16_tf2 --eval eval_er.tfrecords \
 `2025-11-07 21:38:49.271734 step: 197401 mse: 12.430560111999512 R**2: -21.63809585571289 Pearson: 0.8499421599026573`
 
 ```bash
-# Test BA / ER (ER statistics) 
+# Test BA / ER (ER Stats) 
 python eval_tf2.py --log_dir log/ba16_tf2 --eval eval_er.tfrecords \
   --W-shift 69.3 --W-scale 15.95 --mu-shift 0.199 --mu-scale 0.12 
 ```
