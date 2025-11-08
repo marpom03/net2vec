@@ -291,10 +291,6 @@ The following tables compare the benchmark results from the original TF1 noteboo
 
 #### BA Model Evaluation Logs
 
-Jasne, oto dane sformatowane zgodnie z Twoim przykładem:
-
-#### BA Model Evaluation Logs
-
 ```bash
 # Test BA / BA 
 python eval_tf2.py --log_dir log/ba16_tf2 --eval eval.tfrecords \
