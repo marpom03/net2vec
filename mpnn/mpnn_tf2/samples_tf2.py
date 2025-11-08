@@ -1,26 +1,49 @@
 import networkx as nx
 import numpy as np
-import  scipy as sp
 import tensorflow as tf
 import argparse
 import datetime
-import glob
 import os
-import sys
+import xml.etree.ElementTree as ET
 
-sndlib_networks = None
+
+sndlib_networks = None 
+
+def read_sndlib_xml(filepath):
+    
+    G = nx.Graph()
+    ns = {'snd': 'http://sndlib.zib.de/network'} 
+
+    tree = ET.parse(filepath)
+    root = tree.getroot()
+
+    nodes_element = root.find('snd:networkStructure/snd:nodes', ns)
+    if nodes_element is not None:
+        for node in nodes_element.findall('snd:node', ns):
+            node_id = node.get('id')
+            G.add_node(node_id)
+
+    links_element = root.find('snd:networkStructure/snd:links', ns)
+    if links_element is not None:
+        for link in links_element.findall('snd:link', ns):
+            source = link.find('snd:source', ns).text
+            target = link.find('snd:target', ns).text
+            G.add_edge(source, target)
+            
+    return G
+
 
 class GraphProvider:
     def get(self):
         G = self._get()
-        G=nx.convert_node_labels_to_integers(G)
+        G=nx.convert_node_labels_to_integers(G)     
         return G
 
 class BarabasiAlbert(GraphProvider):
     def __init__(self,n):
-        self.n = n
-        self.nmin=10
-        self.m = 2
+        self.n = n        
+        self.nmin=10       
+        self.m = 2         
     def _get(self):
         return nx.barabasi_albert_graph(np.random.randint(self.nmin,self.n),self.m)
 
@@ -36,9 +59,11 @@ class ErdosReni(GraphProvider):
 
 class SNDLib(GraphProvider):
     def __init__(self,flist):
-        self.sndlib_networks = {os.path.split(f)[1][0:-8]:nx.read_graphml(f) for f in flist}
+        # self.sndlib_networks = {os.path.split(f)[1][0:-8]:nx.read_graphml(f) for f in flist}
+        self.sndlib_networks = {os.path.split(f)[1][0:-4]:read_sndlib_xml(f) for f in flist}
+        
         # UPC hack
-        self.sndlib_networks = {k:v for k,v in self.sndlib_networks.items() if len(v) < 38 and len(v) > 19}
+        # self.sndlib_networks = {k:v for k,v in self.sndlib_networks.items() if len(v) < 38 and len(v) > 19}
         self.names = list(self.sndlib_networks.keys())
         print(self.names)
 
@@ -48,39 +73,49 @@ class SNDLib(GraphProvider):
         return Gm
 
 
-def make_sample(provider, rl=0.3, rh=0.7):
+def make_sample(provider, rl=0.3, rh=0.7):      
     Gm=provider.get()
 
     #A=nx.convert_matrix.to_numpy_matrix(Gm)
-    A=nx.convert_matrix.to_numpy_array(Gm)
+    A=nx.convert_matrix.to_numpy_array(Gm)          
 
     # Make all intensities addup to 1
-    L=np.random.uniform(size=(len(Gm),1))
+    L=np.random.uniform(size=(len(Gm),1))       
     L = L /np.sum(L)
-    p=1.0/(np.sum(A,axis=1)+1.0)
+
+
+    #p=1.0/(np.sum(A,axis=1)+1.0)
+    p=1.0/(np.sum(A,axis=1, keepdims=True)+1.0)     
+
+
     R=np.multiply(A,p)
 
-
     lam=np.linalg.solve(np.identity(len(Gm))-np.transpose( R ) ,L)
-    #random utilisation of each node
+
+
     rho=np.random.uniform(low=rl,high=rh, size=lam.shape)
+
+
     # Beta make higher util more probable, P(rho=1)=0
     #rho = np.random.beta(20,2,size=lam.shape)
     #rho = 0.9 * np.ones(shape=lam.shape)
+
     mu = lam/rho
+
     ll=rho/(1-rho)
+
     W=np.sum(ll)/np.sum(L)
 
-    #  Max value of W is of order n*0.99/(1 -0.99)
-
-    nx.set_node_attributes(Gm, name='mu', values=dict(zip(Gm.nodes(),np.ndarray.tolist(mu[:,0]))))
-    nx.set_node_attributes(Gm, name='Lambda', values=dict(zip(Gm.nodes(),np.ndarray.tolist(L[:,0]))))
-    it=np.nditer(R, order='F', flags=['multi_index'])
+    nx.set_node_attributes(Gm, name='mu', values=dict(zip(Gm.nodes(),np.ndarray.tolist(mu[:,0]))))          
+    nx.set_node_attributes(Gm, name='Lambda', values=dict(zip(Gm.nodes(),np.ndarray.tolist(L[:,0]))))       
+    it=np.nditer(R, order='F', flags=['multi_index'])               
     at = {it.multi_index:float(x) for x in it if x > 0}
     nx.set_edge_attributes(Gm,name='R', values=at)
-    Gm.graph['W']=W
+    Gm.graph['W']=W     
 
     return mu,L,R,W,Gm
+
+
 
 def _int64_feature(value):
     return tf.train.Feature(int64_list=tf.train.Int64List(value=value))
@@ -88,24 +123,34 @@ def _int64_feature(value):
 def _float_feature(value):
     return tf.train.Feature(float_list=tf.train.FloatList(value=value))
 
-def make_dataset(count, file, producer):
+
+
+
+def make_dataset(count, file, producer):           
+
     #n=10
     #p=0.2
     #writer = tf.python_io.TFRecordWriter(file)
     writer = tf.io.TFRecordWriter(file)
+
+
     for i in range(count):
         if not i % 500:
             print('{} generated {} samples.'.format(str(datetime.datetime.now()) , i ) )
 
-        mu,L,R,W,Gm=producer()
+        mu,L,R,W,Gm=producer()         
+
         #while W > 3.3:
         #    mu,L,R,W,Gm=make_sample(n,p)
 
-        mu = mu[:,0].tolist()
+        mu = mu[:,0].tolist()          
         L = L[:,0].tolist()
-        first,last=np.nonzero(R)
+
+
+        first,last=np.nonzero(R)       
         #e=R[first,last].tolist()[0]
-        e=R[first,last].tolist()
+        e=R[first,last].tolist()        
+
 
         example = tf.train.Example(features=tf.train.Features(feature={
             'mu': _float_feature(mu),
