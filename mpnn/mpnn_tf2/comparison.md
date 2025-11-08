@@ -279,7 +279,7 @@ The following tables compare the benchmark results from the original TF1 noteboo
 | | | **R²** | **-20.2154** | **-21.6380** |
 | | | Pearson ρ | 0.8631 | 0.8499 |
 | `eval_er60.tfrecords` | **BA / ER (ER statistics)** | MSE | 9.0614 | 41.9479 |
-| | | **R²** | -7.8326 | **-39.1546** |
+| | | **R²** | **-7.8326** | **-39.1546** |
 | | | Pearson ρ | 0.7191 | 0.6414 |
 | `eval_snd_2038.tfrecords` | **BA / SNDLib (mix)** | MSE | 1.4945 | 1.2138 |
 | | | **R²** | **-2.3634** | **-5.4725** |
