@@ -334,7 +334,7 @@ python eval_tf2.py --log_dir log/ba16_tf2 --eval eval_snd_germany50.tfrecords \
 
 ### 2\. ER Model Evaluation (Checkpoint 198000)
 
-*This model was trained on Erdős-Rényi (ER) graphs. [cite\_start]All tests use the ER normalization stats.* 
+*This model was trained on Erdős-Rényi (ER) graphs. All tests use the ER normalization stats.* 
 
 | Evaluation File (Test) | Scenario (Train / Test) | Metric | TF1 (mean) | TF2 |
 | :--- | :--- | :--- | :--- | :--- |
