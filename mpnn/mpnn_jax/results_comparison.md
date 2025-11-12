@@ -1,7 +1,10 @@
 # Comparison of MPNN Implementations
 
+
 The following tables present a comparison between three implementations of the Message Passing Neural Network (MPNN):
 the original TensorFlow 1 version (as proposed in Message-Passing Neural Networks Learn Little’s Law), and two modern re-implementations in JAX - Linen and JAX - NNX frameworks.
+
+**Training setup:** All models were trained for **200,000 iterations** on **20,000 training samples** with **200 validation samples**; each test set contained **2,000 samples**.
 
 ### BA / BA
 
@@ -111,3 +114,4 @@ the original TensorFlow 1 version (as proposed in Message-Passing Neural Network
 
 
 ---
+
