@@ -119,7 +119,7 @@ class ReadoutLayer(nnx.Module):
         self.h1 = nnx.Linear(rn, rn, rngs=rngs)
         self.h2 = nnx.Linear(rn, 1, rngs=rngs)
 
-    def __call__(self, graph: jraph.GraphsTuple, node_mask: jnp.ndarray, return_pooled: bool = False):
+    def __call__(self, graph: jraph.GraphsTuple, node_mask: jnp.ndarray):
         h = graph.nodes            # (N, N_H)
         x = graph.nodes[:, :2]     
         hx = jnp.concatenate([h, x], axis=-1)  # (N, N_H+2)
@@ -141,7 +141,7 @@ class ReadoutLayer(nnx.Module):
         out = self.h2(out)  # (B,1)
         out = out.squeeze(-1)  # (B,)
 
-        return (out, pooled) if return_pooled else out
+        return out
 
 class MPNN_NNX(nnx.Module):
     """
@@ -163,7 +163,7 @@ class MPNN_NNX(nnx.Module):
         self.upd = NodeUpdateLayer(N_H=N_H, rngs=rngs)
         self.readout = ReadoutLayer(rn=rn, N_H=N_H, rngs=rngs)
 
-    def __call__(self, inputs: Tuple[jraph.GraphsTuple, jnp.ndarray, jnp.ndarray], return_pooled: bool = False):
+    def __call__(self, inputs: Tuple[jraph.GraphsTuple, jnp.ndarray, jnp.ndarray]):
         graph, node_mask, edge_mask = inputs
 
         h0 = _init_node_state(graph.nodes, self.N_H - 2)
@@ -174,4 +174,4 @@ class MPNN_NNX(nnx.Module):
             h_new = self.upd(graph.nodes, m_j)
             graph = graph._replace(nodes=h_new)
 
-        return self.readout(graph, node_mask, return_pooled=return_pooled)
+        return self.readout(graph, node_mask)

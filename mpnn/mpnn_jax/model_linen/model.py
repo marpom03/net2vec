@@ -95,20 +95,6 @@ class NodeUpdateLayer(nn.Module):
         h_new, _ = gru(h_old, m_j)   
         return h_new
     
-class MPNNStep(nn.Module):
-    """
-    A single MP layer: MessagePassingLayer → NodeUpdateLayer.
-    """
-    hidden_dim: int   
-    N_H: int
-
-    @nn.compact
-    def __call__(self, graph, edge_mask):
-        m_j = MessagePassingLayer(self.hidden_dim, self.N_H)(graph, edge_mask)
-        h_old = graph.nodes
-        h_new = NodeUpdateLayer(self.N_H)(h_old, m_j)
-        return graph._replace(nodes=h_new)
-    
 class ReadoutLayer(nn.Module):    
     """
     Graph-level readout with gating: sigmoid(i(h,x)) ⊙ j(h,x), pooled by sum.
@@ -117,7 +103,7 @@ class ReadoutLayer(nn.Module):
     N_H: int     
 
     @nn.compact
-    def __call__(self, graph, node_mask, return_pooled=False):
+    def __call__(self, graph, node_mask):
         h = graph.nodes          # (N, N_H)
         x = graph.nodes[:, :2]   
         hx = jnp.concatenate([h, x], axis=-1)  # (N, N_H+2)
@@ -136,8 +122,6 @@ class ReadoutLayer(nn.Module):
         out = nn.selu(nn.Dense(self.rn)(pooled))
         out = nn.Dense(1)(out)     
 
-        if return_pooled:
-            return out.squeeze(), pooled
         return out.squeeze()       # (B,)
     
 class MPNN(nn.Module):
@@ -153,7 +137,7 @@ class MPNN(nn.Module):
     num_passes: int   # args.N_PAS (np. 4)
 
     @nn.compact
-    def __call__(self, inputs, return_pooled=False):
+    def __call__(self, inputs):
         graph, node_mask, edge_mask = inputs
         h0 = init_node_state(graph.nodes, self.N_H - 2)
         graph = graph._replace(nodes=h0)
@@ -164,5 +148,5 @@ class MPNN(nn.Module):
             h_new = NodeUpdateLayer(self.N_H)(h_old, m_j)
             graph = graph._replace(nodes=h_new)
 
-        return ReadoutLayer(self.rn, self.N_H)(graph, node_mask, return_pooled=return_pooled)
+        return ReadoutLayer(self.rn, self.N_H)(graph, node_mask)
 
