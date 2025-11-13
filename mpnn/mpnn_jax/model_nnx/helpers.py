@@ -31,7 +31,7 @@ def save_checkpoint(ckpt_dir: str, model: nnx.Module, W_mean: float, W_std: floa
         "W_std": float(W_std), 
     }
 
-    checkpointer.save(ckpt_dir, payload)
+    checkpointer.save(ckpt_dir, payload, force=True)
     checkpointer.wait_until_finished()
     return ckpt_dir
 
@@ -77,10 +77,14 @@ def load_checkpoint(ckpt_dir: str, model_ctor: Callable[[], nnx.Module]):
     graphdef, abstract_state = nnx.split(abstract_model)
     abstract_state = _encode_rng_state(abstract_state)
 
-    template = {"state": abstract_state, "W_mean": 0.0, "W_std": 1.0}
+    template = {
+        "state": abstract_state, 
+        "W_mean": 0.0, 
+        "W_std": 1.0
+    }
 
-    checkpointer = ocp.PyTreeCheckpointer()
-    payload = checkpointer.restore(ckpt_dir, item=template)
+    checkpointer = ocp.StandardCheckpointer()
+    payload = checkpointer.restore(ckpt_dir, target=template)
 
     state = nnx.State(payload["state"])
     state = _decode_rng_state(state)
