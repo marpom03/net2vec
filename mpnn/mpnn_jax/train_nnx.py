@@ -153,9 +153,9 @@ if __name__ == "__main__":
         print("\nTraining interrupted by user. Saving checkpoint...")
         full_state = combine_state(params, frozen_state, mask)
         model_to_save = nnx.merge(graphdef, full_state)
-        save_checkpoint(f"{cfg.output_path}/model_nnx_checkpoint.msgpack", model_to_save, W_mean, W_std)
+        save_checkpoint(f"{cfg.output_path}/model_nnx_checkpoint", model_to_save, W_mean, W_std)
         raise
 
     full_state = combine_state(params, frozen_state, mask)
     model_to_save = nnx.merge(graphdef, full_state)
-    save_checkpoint(f"{cfg.output_path}/model_nnx_final.msgpack", model_to_save, W_mean, W_std)
+    save_checkpoint(f"{cfg.output_path}/model_nnx_final", model_to_save, W_mean, W_std)
