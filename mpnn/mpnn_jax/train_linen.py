@@ -107,7 +107,6 @@ if __name__ == "__main__":
                 tqdm.write(f"step {step:04d}   loss = {loss:.6f}")
     except KeyboardInterrupt:
         print("\n Training interrupted by user. Saving checkpoint...")
-        save_checkpoint(f"{cfg.output_path}/model_linen_checkpoint.msgpack", params, W_mean, W_std)
+        save_checkpoint(f"{cfg.output_path}/model_linen_checkpoint", params, W_mean, W_std)
         raise
-    save_checkpoint(f"{cfg.output_path}/model_linen_final.msgpack", params, W_mean, W_std)
-
+    save_checkpoint(f"{cfg.output_path}/model_linen_final", params, W_mean, W_std)
