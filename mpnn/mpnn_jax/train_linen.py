@@ -43,12 +43,12 @@ def train_step(params, opt_state, batch):
 
 if __name__ == "__main__":
     """
-    Training script for the NNX implementation of the MPNN:
-      1. Load datasets and normalize features/labels according to `norm_profile`.
-      2. Build an NNX model, split into graphdef/state, and partition the state into trainable vs frozen leaves (with a boolean mask).
-      3. Use `optax.masked` to update only trainable leaves.
-      4. Train with RMSProp in the normalized space; periodically log metrics on both train and validation batches.
-      5. Save the full merged state (params + buffers) on exit.
+    Training script for the Linen implementation of the MPNN:
+    1. Load datasets and normalize features/labels according to `norm_profile`.
+    2. Build a Linen MPNN model and initialize parameters.
+    3. Train with RMSProp in the normalized space; periodically log metrics on train and validation batches.
+    4. Optionally use early stopping based on validation MSE.
+    5. Save best and final checkpoints using Orbax.
     """
 
     cfg = TrainingConfig()
@@ -56,8 +56,7 @@ if __name__ == "__main__":
 
     graphs = load_npz_as_graphs(cfg.train_dataset_path, norm)
     eval_graphs = load_npz_as_graphs(cfg.val_dataset_path, norm)
-    
-    Ws_train = jnp.array([float(g.globals[0]) for g in graphs])
+
     W_mean = float(norm.W_shift)
     W_std  = float(norm.W_scale)
 
@@ -76,12 +75,20 @@ if __name__ == "__main__":
     optimizer = optax.rmsprop(learning_rate=cfg.learning_rate)
     opt_state = optimizer.init(params)
 
+    best_val_mse = float("inf")
+    no_improve_checks = 0
+    tolerance = 1e-6
+
+    best_params = params  
+    best_step = 0          
+    best_ckpt_path = f"{cfg.output_path}/model_linen_best"
+
     try:
         for step in trange(cfg.steps, desc="Model training"):
             (batch_graph, nmask, emask), key = next(train_loader)
             params, opt_state, loss = train_step(params, opt_state, (batch_graph, nmask, emask))
 
-            if step % 200 == 1:
+            if step % cfg.log_interval == 1:
                 preds  = model.apply(params, (batch_graph, nmask, emask))
                 labels = batch_graph.globals.squeeze()
 
@@ -105,8 +112,35 @@ if __name__ == "__main__":
                 tqdm.write(f"[VAL step {step:05d}] "
                         f"MSE={val_mse:.6f}  MAE={val_mae:.6f}  R²={val_r2:.6f}")
                 tqdm.write(f"step {step:04d}   loss = {loss:.6f}")
+
+                val_mse_float = float(val_mse)
+                if val_mse_float + tolerance < best_val_mse:
+                    best_val_mse = val_mse_float
+                    no_improve_checks = 0
+                    best_params = params
+                    best_step = step
+
+                else:
+                    if cfg.use_early_stopping and cfg.early_stopping_patience > 0:
+                        no_improve_checks += 1
+
+                        if no_improve_checks >= cfg.early_stopping_patience:
+                            tqdm.write(
+                                f"Early stopping at step {step:05d}. "
+                                f"Best VAL MSE: {best_val_mse:.6f}"
+                                f"(step {best_step:05d})"
+                            )
+                            break
+
     except KeyboardInterrupt:
         print("\n Training interrupted by user. Saving checkpoint...")
         save_checkpoint(f"{cfg.output_path}/model_linen_checkpoint", params, W_mean, W_std)
         raise
+    
+    tqdm.write(
+    f"Saving BEST params from step {best_step:05d} with "
+    f"VAL MSE={best_val_mse:.6f} -> {best_ckpt_path}"
+    )
+    
+    save_checkpoint(best_ckpt_path, best_params, W_mean, W_std)
     save_checkpoint(f"{cfg.output_path}/model_linen_final", params, W_mean, W_std)
