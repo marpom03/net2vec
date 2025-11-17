@@ -119,6 +119,13 @@ if __name__ == "__main__":
     loss_fn = build_loss_fn(apply_fn)
     train_step = build_train_step(loss_fn, optimizer)
 
+    best_val_mse = float("inf")
+    no_improve_checks = 0
+    tolerance = 1e-6
+    best_params = params
+    best_step = 0
+    best_ckpt_path = f"{cfg.output_path}/model_nnx_best"
+
     try:
         for step in trange(cfg.steps, desc="Model training"):
             (batch_graph, nmask, emask), key = next(train_loader)
@@ -126,8 +133,7 @@ if __name__ == "__main__":
 
             params, opt_state, loss = train_step(params, opt_state, batch)
 
-            if step % 200 == 1:
-                # Train metrics
+            if step % cfg.log_interval == 1:
                 preds  = apply_fn(params, batch)
                 labels = batch_graph.globals.squeeze()
 
@@ -137,7 +143,6 @@ if __name__ == "__main__":
 
                 tqdm.write(f"[TRAIN step {step:05d}] MSE={mse_val:.6f}  MAE={mae_val:.6f}  R²={r2_val:.6f}")
 
-                # Val metrics
                 (val_graph, vnmask, vemask), key = next(val_loader)
                 val_batch = (val_graph, vnmask, vemask)
                 val_preds  = apply_fn(params, val_batch)
@@ -149,6 +154,28 @@ if __name__ == "__main__":
 
                 tqdm.write(f"[VAL step {step:05d}] MSE={val_mse:.6f}  MAE={val_mae:.6f}  R²={val_r2:.6f}")
                 tqdm.write(f"step {step:04d}   loss = {loss:.6f}")
+
+                val_mse_float = float(val_mse)
+                if val_mse_float + tolerance < best_val_mse:
+                    
+                    best_val_mse = val_mse_float
+                    no_improve_checks = 0
+
+                    best_params = params
+                    best_step = step
+
+                else:
+                    if cfg.use_early_stopping and cfg.early_stopping_patience > 0:
+                        no_improve_checks += 1
+
+                        if no_improve_checks >= cfg.early_stopping_patience:
+                            tqdm.write(
+                                f"Early stopping at step {step:05d}. "
+                                f"Best VAL MSE: {best_val_mse:.6f}"
+                                f"(step {best_step:05d})"
+                            )
+                            break
+
     except KeyboardInterrupt:
         print("\nTraining interrupted by user. Saving checkpoint...")
         full_state = combine_state(params, frozen_state, mask)
@@ -156,6 +183,20 @@ if __name__ == "__main__":
         save_checkpoint(f"{cfg.output_path}/model_nnx_checkpoint", model_to_save, W_mean, W_std)
         raise
 
-    full_state = combine_state(params, frozen_state, mask)
-    model_to_save = nnx.merge(graphdef, full_state)
-    save_checkpoint(f"{cfg.output_path}/model_nnx_final", model_to_save, W_mean, W_std)
+    full_state_best = combine_state(best_params, frozen_state, mask)
+    model_best = nnx.merge(graphdef, full_state_best)
+    tqdm.write(
+        f"Saving BEST params from step {best_step:05d} with "
+        f"VAL MSE={best_val_mse:.6f} -> {best_ckpt_path}"
+    )
+    save_checkpoint(best_ckpt_path, model_best, W_mean, W_std)
+
+    full_state_final = combine_state(params, frozen_state, mask)
+    model_final = nnx.merge(graphdef, full_state_final)
+    save_checkpoint(
+        f"{cfg.output_path}/model_nnx_final",
+        model_final,
+        W_mean,
+        W_std,
+    )
+
