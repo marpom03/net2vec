@@ -26,7 +26,7 @@ def save_checkpoint(ckpt_dir: str, params, W_mean: float, W_std: float) -> str:
     checkpointer = ocp.StandardCheckpointer()
     checkpointer.save(ckpt_dir, payload, force=True)
     checkpointer.wait_until_finished()
-    print(f"Saved checkpoint to {ckpt_dir}")
+
 
 
 def load_checkpoint(ckpt_dir: str, model, example_graph):
