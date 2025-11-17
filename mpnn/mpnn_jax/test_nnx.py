@@ -81,9 +81,9 @@ def main():
     lims = [min(float(labels.min()), float(preds.min())),
             max(float(labels.max()), float(preds.max()))]
     plt.plot(lims, lims, "k-", alpha=0.75)
-    plt.xlabel("True (normalized W)")
-    plt.ylabel("Predicted (normalized W)")
-    plt.title("Evaluation (NNX parity with Linen)")
+    plt.xlabel("True label")
+    plt.ylabel("Predicted label")
+    plt.title("Evaluation")
     plt.grid(True)
     plt.savefig(f"{test_cfg.output_path}/eval.pdf")
     plt.close()
@@ -91,7 +91,7 @@ def main():
     # Histogram residuals
     plt.figure()
     plt.hist((labels - preds), bins=50)
-    plt.title("Residuals (NNX)")
+    plt.title("Histogram of residuals")
     plt.grid(True)
     plt.savefig(f"{test_cfg.output_path}/residuals_hist.pdf")
     plt.close()
