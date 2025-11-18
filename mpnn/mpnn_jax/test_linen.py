@@ -84,8 +84,8 @@ def main():
     plt.plot(labels, preds, ".", alpha=0.6)
     lims = [min(labels.min(), preds.min()), max(labels.max(), preds.max())]
     plt.plot(lims, lims, "k-", alpha=0.75)
-    plt.xlabel("True")
-    plt.ylabel("Predicted")
+    plt.xlabel("True label")
+    plt.ylabel("Predicted label")
     plt.title("Evaluation")
     plt.grid(True)
     plt.savefig(f"{test_cfg.output_path}/eval.pdf")
@@ -94,7 +94,7 @@ def main():
     # Histogram residuals
     plt.figure()
     plt.hist((labels - preds), bins=50)
-    plt.title("Residuals")
+    plt.title("Histogram of residuals")
     plt.grid(True)
     plt.savefig(f"{test_cfg.output_path}/residuals_hist.pdf")
     plt.close()
