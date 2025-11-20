@@ -299,14 +299,14 @@ Each evaluation reports:
     <th style="text-align:center;">JAX NNX</th>
   </tr>
   <tr>
-    <td><img src="plots/tf1/er_ba/er-ba1_white.png" width="250"></td>
-    <td><img src="plots/linen/er_ba/eval.svg" width="250"></td>
-    <td><img src="plots/nnx/er_ba/eval.svg" width="250"></td>
+    <td><img src="plots/tf1/er_ba/er-ba1_white.png" width="450"></td>
+    <td><img src="plots/linen/er_ba/eval.svg" width="450"></td>
+    <td><img src="plots/nnx/er_ba/eval.svg" width="450"></td>
   </tr>
   <tr>
-    <td><img src="plots/tf1/er_ba/er-ba2_white.png" width="250"></td>
-    <td><img src="plots/linen/er_ba/residuals_hist.svg" width="250"></td>
-    <td><img src="plots/nnx/er_ba/residuals_hist.svg" width="250"></td>
+    <td><img src="plots/tf1/er_ba/er-ba2_white.png" width="450"></td>
+    <td><img src="plots/linen/er_ba/residuals_hist.svg" width="450"></td>
+    <td><img src="plots/nnx/er_ba/residuals_hist.svg" width="450"></td>
   </tr>
 </table>
 
