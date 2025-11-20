@@ -152,14 +152,14 @@ Each evaluation reports:
     <th style="text-align:center;">JAX NNX</th>
   </tr>
   <tr>
-    <td><img src="mpnn_jax/plots/tf1/ba_ba/ba-ba1_white.png" width="450"></td>
-    <td><img src="mpnn_jax/plots/linen/ba_ba/eval.svg" width="450"></td>
-    <td><img src="mpnn_jax/plots/nnx/ba_ba/eval.svg" width="450"></td>
+    <td><img src="plots/tf1/ba_ba/ba-ba1_white.png" width="450"></td>
+    <td><img src="plots/linen/ba_ba/eval.svg" width="450"></td>
+    <td><img src="plots/nnx/ba_ba/eval.svg" width="450"></td>
   </tr>
   <tr>
-    <td><img src="mpnn_jax/plots/tf1/ba_ba/ba-ba2_white.png" width="450"></td>
-    <td><img src="mpnn_jax/plots/linen/ba_ba/residuals_hist.svg" width="450"></td>
-    <td><img src="mpnn_jax/plots/nnx/ba_ba/residuals_hist.svg" width="450"></td>
+    <td><img src="plots/tf1/ba_ba/ba-ba2_white.png" width="450"></td>
+    <td><img src="plots/linen/ba_ba/residuals_hist.svg" width="450"></td>
+    <td><img src="plots/nnx/ba_ba/residuals_hist.svg" width="450"></td>
   </tr>
 </table>
 
@@ -181,14 +181,14 @@ Each evaluation reports:
     <th style="text-align:center;">JAX NNX</th>
   </tr>
   <tr>
-    <td><img src="mpnn_jax/plots/tf1/ba_er/ba-er1_white.png" width="450"></td>
-    <td><img src="mpnn_jax/plots/linen/ba_er/eval.svg" width="450"></td>
-    <td><img src="mpnn_jax/plots/nnx/ba_er/eval.svg" width="450"></td>
+    <td><img src="plots/tf1/ba_er/ba-er1_white.png" width="450"></td>
+    <td><img src="plots/linen/ba_er/eval.svg" width="450"></td>
+    <td><img src="plots/nnx/ba_er/eval.svg" width="450"></td>
   </tr>
   <tr>
-    <td><img src="mpnn_jax/plots/tf1/ba_er/ba-er2_white.png" width="450"></td>
-    <td><img src="mpnn_jax/plots/linen/ba_er/residuals_hist.svg" width="450"></td>
-    <td><img src="mpnn_jax/plots/nnx/ba_er/residuals_hist.svg" width="450"></td>
+    <td><img src="plots/tf1/ba_er/ba-er2_white.png" width="450"></td>
+    <td><img src="plots/linen/ba_er/residuals_hist.svg" width="450"></td>
+    <td><img src="plots/nnx/ba_er/residuals_hist.svg" width="450"></td>
   </tr>
 </table>
 
@@ -209,14 +209,14 @@ Each evaluation reports:
     <th style="text-align:center;">JAX NNX</th>
   </tr>
   <tr>
-    <td><img src="mpnn_jax/plots/tf1/ba_germany50/ba-germany501_white.png" width="450"></td>
-    <td><img src="mpnn_jax/plots/linen/ba_germany50/eval.svg" width="450"></td>
-    <td><img src="mpnn_jax/plots/nnx/ba_germany50/eval.svg" width="450"></td>
+    <td><img src="plots/tf1/ba_germany50/ba-germany501_white.png" width="450"></td>
+    <td><img src="plots/linen/ba_germany50/eval.svg" width="450"></td>
+    <td><img src="plots/nnx/ba_germany50/eval.svg" width="450"></td>
   </tr>
   <tr>
-    <td><img src="mpnn_jax/plots/tf1/ba_germany50/ba-germany502_white.png" width="450"></td>
-    <td><img src="mpnn_jax/plots/linen/ba_germany50/residuals_hist.svg" width="450"></td>
-    <td><img src="mpnn_jax/plots/nnx/ba_germany50/residuals_hist.svg" width="450"></td>
+    <td><img src="plots/tf1/ba_germany50/ba-germany502_white.png" width="450"></td>
+    <td><img src="plots/linen/ba_germany50/residuals_hist.svg" width="450"></td>
+    <td><img src="plots/nnx/ba_germany50/residuals_hist.svg" width="450"></td>
   </tr>
 </table>
 
@@ -239,14 +239,14 @@ Each evaluation reports:
     <th style="text-align:center;">JAX NNX</th>
   </tr>
   <tr>
-    <td><img src="mpnn_jax/plots/tf1/ba_sndlib/ba-sndlib1_white.png" width="450"></td>
-    <td><img src="mpnn_jax/plots/linen/ba_sndlib/eval.svg" width="450"></td>
-    <td><img src="mpnn_jax/plots/nnx/ba_sndlib/eval.svg" width="450"></td>
+    <td><img src="plots/tf1/ba_sndlib/ba-sndlib1_white.png" width="450"></td>
+    <td><img src="plots/linen/ba_sndlib/eval.svg" width="450"></td>
+    <td><img src="plots/nnx/ba_sndlib/eval.svg" width="450"></td>
   </tr>
   <tr>
-    <td><img src="mpnn_jax/plots/tf1/ba_sndlib/ba-sndlib2_white.png" width="450"></td>
-    <td><img src="mpnn_jax/plots/linen/ba_sndlib/residuals_hist.svg" width="450"></td>
-    <td><img src="mpnn_jax/plots/nnx/ba_sndlib/residuals_hist.svg" width="450"></td>
+    <td><img src="plots/tf1/ba_sndlib/ba-sndlib2_white.png" width="450"></td>
+    <td><img src="plots/linen/ba_sndlib/residuals_hist.svg" width="450"></td>
+    <td><img src="plots/nnx/ba_sndlib/residuals_hist.svg" width="450"></td>
   </tr>
 </table>
 
@@ -269,14 +269,14 @@ Each evaluation reports:
     <th style="text-align:center;">JAX NNX</th>
   </tr>
   <tr>
-    <td><img src="mpnn_jax/plots/tf1/er_er/er-er1_white.png" width="450"></td>
-    <td><img src="mpnn_jax/plots/linen/er_er/eval.svg" width="450"></td>
-    <td><img src="mpnn_jax/plots/nnx/er_er/eval.svg" width="450"></td>
+    <td><img src="plots/tf1/er_er/er-er1_white.png" width="450"></td>
+    <td><img src="plots/linen/er_er/eval.svg" width="450"></td>
+    <td><img src="plots/nnx/er_er/eval.svg" width="450"></td>
   </tr>
   <tr>
-    <td><img src="mpnn_jax/plots/tf1/er_er/er-er2_white.png" width="450"></td>
-    <td><img src="mpnn_jax/plots/linen/er_er/residuals_hist.svg" width="450"></td>
-    <td><img src="mpnn_jax/plots/nnx/er_er/residuals_hist.svg" width="450"></td>
+    <td><img src="plots/tf1/er_er/er-er2_white.png" width="450"></td>
+    <td><img src="plots/linen/er_er/residuals_hist.svg" width="450"></td>
+    <td><img src="plots/nnx/er_er/residuals_hist.svg" width="450"></td>
   </tr>
 </table>
 
@@ -299,14 +299,14 @@ Each evaluation reports:
     <th style="text-align:center;">JAX NNX</th>
   </tr>
   <tr>
-    <td><img src="mpnn_jax/plots/tf1/er_ba/er-ba1_white.png" width="250"></td>
-    <td><img src="mpnn_jax/plots/linen/er_ba/eval.svg" width="250"></td>
-    <td><img src="mpnn_jax/plots/nnx/er_ba/eval.svg" width="250"></td>
+    <td><img src="plots/tf1/er_ba/er-ba1_white.png" width="250"></td>
+    <td><img src="plots/linen/er_ba/eval.svg" width="250"></td>
+    <td><img src="plots/nnx/er_ba/eval.svg" width="250"></td>
   </tr>
   <tr>
-    <td><img src="mpnn_jax/plots/tf1/er_ba/er-ba2_white.png" width="250"></td>
-    <td><img src="mpnn_jax/plots/linen/er_ba/residuals_hist.svg" width="250"></td>
-    <td><img src="mpnn_jax/plots/nnx/er_ba/residuals_hist.svg" width="250"></td>
+    <td><img src="plots/tf1/er_ba/er-ba2_white.png" width="250"></td>
+    <td><img src="plots/linen/er_ba/residuals_hist.svg" width="250"></td>
+    <td><img src="plots/nnx/er_ba/residuals_hist.svg" width="250"></td>
   </tr>
 </table>
 
@@ -329,14 +329,14 @@ Each evaluation reports:
     <th style="text-align:center;">JAX NNX</th>
   </tr>
   <tr>
-    <td><img src="mpnn_jax/plots/tf1/er_er60/er-er601_white.png" width="450"></td>
-    <td><img src="mpnn_jax/plots/linen/er_er60/eval.svg" width="450"></td>
-    <td><img src="mpnn_jax/plots/nnx/er_er60/eval.svg" width="450"></td>
+    <td><img src="plots/tf1/er_er60/er-er601_white.png" width="450"></td>
+    <td><img src="plots/linen/er_er60/eval.svg" width="450"></td>
+    <td><img src="plots/nnx/er_er60/eval.svg" width="450"></td>
   </tr>
   <tr>
-    <td><img src="mpnn_jax/plots/tf1/er_er60/er-er602_white.png" width="450"></td>
-    <td><img src="mpnn_jax/plots/linen/er_er60/residuals_hist.svg" width="450"></td>
-    <td><img src="mpnn_jax/plots/nnx/er_er60/residuals_hist.svg" width="450"></td>
+    <td><img src="plots/tf1/er_er60/er-er602_white.png" width="450"></td>
+    <td><img src="plots/linen/er_er60/residuals_hist.svg" width="450"></td>
+    <td><img src="plots/nnx/er_er60/residuals_hist.svg" width="450"></td>
   </tr>
 </table>
 
@@ -358,14 +358,14 @@ Each evaluation reports:
     <th style="text-align:center;">JAX NNX</th>
   </tr>
   <tr>
-    <td><img src="mpnn_jax/plots/tf1/er_janos-us/er-janos-us1_white.png" width="450"></td>
-    <td><img src="mpnn_jax/plots/linen/er_janos-us/eval.svg" width="450"></td>
-    <td><img src="mpnn_jax/plots/nnx/er_janos-us/eval.svg" width="450"></td>
+    <td><img src="plots/tf1/er_janos-us/er-janos-us1_white.png" width="450"></td>
+    <td><img src="plots/linen/er_janos-us/eval.svg" width="450"></td>
+    <td><img src="plots/nnx/er_janos-us/eval.svg" width="450"></td>
   </tr>
   <tr>
-    <td><img src="mpnn_jax/plots/tf1/er_janos-us/er-janos-us2_white.png" width="450"></td>
-    <td><img src="mpnn_jax/plots/linen/er_janos-us/residuals_hist.svg" width="450"></td>
-    <td><img src="mpnn_jax/plots/nnx/er_janos-us/residuals_hist.svg" width="450"></td>
+    <td><img src="plots/tf1/er_janos-us/er-janos-us2_white.png" width="450"></td>
+    <td><img src="plots/linen/er_janos-us/residuals_hist.svg" width="450"></td>
+    <td><img src="plots/nnx/er_janos-us/residuals_hist.svg" width="450"></td>
   </tr>
 </table>
 
@@ -390,14 +390,14 @@ Each evaluation reports:
     <th style="text-align:center;">JAX NNX</th>
   </tr>
   <tr>
-    <td><img src="mpnn_jax/plots/tf1/er_germany50/er-germany501_white.png" width="450"></td>
-    <td><img src="mpnn_jax/plots/linen/er_germany50/eval.svg" width="450"></td>
-    <td><img src="mpnn_jax/plots/nnx/er_germany50/eval.svg" width="450"></td>
+    <td><img src="plots/tf1/er_germany50/er-germany501_white.png" width="450"></td>
+    <td><img src="plots/linen/er_germany50/eval.svg" width="450"></td>
+    <td><img src="plots/nnx/er_germany50/eval.svg" width="450"></td>
   </tr>
   <tr>
-    <td><img src="mpnn_jax/plots/tf1/er_germany50/er-germany502_white.png" width="450"></td>
-    <td><img src="mpnn_jax/plots/linen/er_germany50/residuals_hist.svg" width="450"></td>
-    <td><img src="mpnn_jax/plots/nnx/er_germany50/residuals_hist.svg" width="450"></td>
+    <td><img src="plots/tf1/er_germany50/er-germany502_white.png" width="450"></td>
+    <td><img src="plots/linen/er_germany50/residuals_hist.svg" width="450"></td>
+    <td><img src="plots/nnx/er_germany50/residuals_hist.svg" width="450"></td>
   </tr>
 </table>
 
@@ -419,14 +419,14 @@ Each evaluation reports:
     <th style="text-align:center;">JAX NNX</th>
   </tr>
   <tr>
-    <td><img src="mpnn_jax/plots/tf1/er_cost266/er-cost2661_white.png" width="450"></td>
-    <td><img src="mpnn_jax/plots/linen/er_cost266/eval.svg" width="450"></td>
-    <td><img src="mpnn_jax/plots/nnx/er_cost266/eval.svg" width="450"></td>
+    <td><img src="plots/tf1/er_cost266/er-cost2661_white.png" width="450"></td>
+    <td><img src="plots/linen/er_cost266/eval.svg" width="450"></td>
+    <td><img src="plots/nnx/er_cost266/eval.svg" width="450"></td>
   </tr>
   <tr>
-    <td><img src="mpnn_jax/plots/tf1/er_cost266/er-cost2662_white.png" width="450"></td>
-    <td><img src="mpnn_jax/plots/linen/er_cost266/residuals_hist.svg" width="450"></td>
-    <td><img src="mpnn_jax/plots/nnx/er_cost266/residuals_hist.svg" width="450"></td>
+    <td><img src="plots/tf1/er_cost266/er-cost2662_white.png" width="450"></td>
+    <td><img src="plots/linen/er_cost266/residuals_hist.svg" width="450"></td>
+    <td><img src="plots/nnx/er_cost266/residuals_hist.svg" width="450"></td>
   </tr>
 </table>
 
@@ -449,14 +449,14 @@ Each evaluation reports:
     <th style="text-align:center;">JAX NNX</th>
   </tr>
   <tr>
-    <td><img src="mpnn_jax/plots/tf1/er_janos-us-ca/er-janos-us-ca1_white.png" width="450"></td>
-    <td><img src="mpnn_jax/plots/linen/er_janos-us-ca/eval.svg" width="450"></td>
-    <td><img src="mpnn_jax/plots/nnx/er_janos-us-ca/eval.svg" width="450"></td>
+    <td><img src="plots/tf1/er_janos-us-ca/er-janos-us-ca1_white.png" width="450"></td>
+    <td><img src="plots/linen/er_janos-us-ca/eval.svg" width="450"></td>
+    <td><img src="plots/nnx/er_janos-us-ca/eval.svg" width="450"></td>
   </tr>
   <tr>
-    <td><img src="mpnn_jax/plots/tf1/er_janos-us-ca/er-janos-us-ca2_white.png" width="450"></td>
-    <td><img src="mpnn_jax/plots/linen/er_janos-us-ca/residuals_hist.svg" width="450"></td>
-    <td><img src="mpnn_jax/plots/nnx/er_janos-us-ca/residuals_hist.svg" width="450"></td>
+    <td><img src="plots/tf1/er_janos-us-ca/er-janos-us-ca2_white.png" width="450"></td>
+    <td><img src="plots/linen/er_janos-us-ca/residuals_hist.svg" width="450"></td>
+    <td><img src="plots/nnx/er_janos-us-ca/residuals_hist.svg" width="450"></td>
   </tr>
 </table>
 
@@ -478,13 +478,13 @@ Each evaluation reports:
     <th style="text-align:center;">JAX NNX</th>
   </tr>
   <tr>
-    <td><img src="mpnn_jax/plots/tf1/er_sndlib/er-sndlib1_white.png" width="450"></td>
-    <td><img src="mpnn_jax/plots/linen/er_sndlib/eval.svg" width="450"></td>
-    <td><img src="mpnn_jax/plots/nnx/er_sndlib/eval.svg" width="450"></td>
+    <td><img src="plots/tf1/er_sndlib/er-sndlib1_white.png" width="450"></td>
+    <td><img src="plots/linen/er_sndlib/eval.svg" width="450"></td>
+    <td><img src="plots/nnx/er_sndlib/eval.svg" width="450"></td>
   </tr>
   <tr>
-    <td><img src="mpnn_jax/plots/tf1/er_sndlib/er-sndlib2_white.png" width="450"></td>
-    <td><img src="mpnn_jax/plots/linen/er_sndlib/residuals_hist.svg" width="450"></td>
-    <td><img src="mpnn_jax/plots/nnx/er_sndlib/residuals_hist.svg" width="450"></td>
+    <td><img src="plots/tf1/er_sndlib/er-sndlib2_white.png" width="450"></td>
+    <td><img src="plots/linen/er_sndlib/residuals_hist.svg" width="450"></td>
+    <td><img src="plots/nnx/er_sndlib/residuals_hist.svg" width="450"></td>
   </tr>
 </table>
