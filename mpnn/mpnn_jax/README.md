@@ -171,7 +171,7 @@ Each evaluation reports:
 
 | Model            |    MSE |       R² | Pearson |
 | :--------------- | -----: | -------: | ------: |
-| **TensorFlow 1** |  11.50 |   -20.22 |  0.863 |
+| **TensorFlow 1** |  11.500 |   -20.220 |  0.863 |
 | **JAX Linen**    |   4.876 |   -8.237 | 0.778 |
 | **JAX NNX**      |  10.544 |  -18.973 | 0.806 |
 <table>
