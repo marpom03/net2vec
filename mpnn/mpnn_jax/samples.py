@@ -82,6 +82,7 @@ def read_sndlib_xml(filepath):
             
     return G
 
+
 class SNDLib(GraphProvider):
     """
     Graph provider for SNDlib topologies.
