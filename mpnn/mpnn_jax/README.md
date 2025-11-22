@@ -200,7 +200,7 @@ Each evaluation reports:
 | :--------------- | -----: | -------: | ------: |
 | **TensorFlow 1** |  9.0614 |   -7.8326 |  0.7191 |
 | **JAX Linen**    |   3.5365 |   -2.5210 | 0.7489 |
-| **JAX NNX**      |  10.544 |  -18.973 | 0.806 |
+| **JAX NNX**      |  - |  - | - |
 <table>
   <tr>
     <th style="text-align:center;">TensorFlow 1</th>
@@ -208,10 +208,14 @@ Each evaluation reports:
     <th style="text-align:center;">JAX NNX</th>
   </tr>
   <tr>
+    <td></td>
     <td><img src="plots/linen/ba_er(er)/eval.svg" width="450"></td>
+    <td></td>
   </tr>
   <tr>
+    <td></td>
     <td><img src="plots/linen/ba_er(er)/residuals_hist.svg" width="450"></td>
+    <td></td>
   </tr>
 </table>
 
