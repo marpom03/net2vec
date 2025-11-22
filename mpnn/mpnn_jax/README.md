@@ -208,14 +208,14 @@ Each evaluation reports:
     <th style="text-align:center;">JAX NNX</th>
   </tr>
   <tr>
-    <td></td>
+    <td><img src="plots/tf1/ba_er_ernorm/eval.png" width="450"></td>
     <td><img src="plots/linen/ba_er(er)/eval.svg" width="450"></td>
-    <td></td>
+    <td><img src="plots/nnx/ba_er_ernorm/eval.svg" width="450"></td>
   </tr>
   <tr>
-    <td></td>
+    <td><img src="plots/tf1/ba_er_ernorm/residuals_hist.png" width="450"></td>
     <td><img src="plots/linen/ba_er(er)/residuals_hist.svg" width="450"></td>
-    <td></td>
+    <td><img src="plots/nnx/ba_er_ernorm/residuals_hist.svg" width="450"></td>
   </tr>
 </table>
 
