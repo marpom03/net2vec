@@ -83,9 +83,35 @@ def read_sndlib_xml(filepath):
     return G
 
 class SNDLib(GraphProvider):
-    def __init__(self,flist):
-        self.sndlib_networks = {os.path.split(f)[1][0:-4]:read_sndlib_xml(f) for f in flist}
-        #self.sndlib_networks = {k:v for k,v in self.sndlib_networks.items() if len(v) < 38 and len(v) > 19}
+    """
+    Graph provider for SNDlib topologies.
+    
+    flist may contain XML files and/or directories; directories are
+    scanned recursively for .xml files to build the pool of networks.
+    """
+    def __init__(self, flist):
+
+        all_files = []
+
+        for f in flist:
+            if os.path.isdir(f):
+                for root, _, files in os.walk(f):
+                    for name in files:
+                        if name.lower().endswith(".xml"):
+                            all_files.append(os.path.join(root, name))
+            else:
+                all_files.append(f)
+
+        if not all_files:
+            raise ValueError(f"No XML files found for SNDLib in: {flist}")
+
+        self.sndlib_networks = {
+            os.path.splitext(os.path.basename(path))[0]: read_sndlib_xml(path)
+            for path in all_files
+        }
+
+        # self.sndlib_networks = {k:v for k,v in self.sndlib_networks.items() if len(v) < 38 and len(v) > 19}
+
         self.names = list(self.sndlib_networks.keys())
 
     def _get(self, key):
@@ -95,7 +121,6 @@ class SNDLib(GraphProvider):
         Gm = nx.Graph(self.sndlib_networks[name])
         if not nx.is_connected(Gm):
             Gm = Gm.subgraph(max(nx.connected_components(Gm), key=len)).copy()
-
         return Gm, key
 
 
