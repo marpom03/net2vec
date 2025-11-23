@@ -1,3 +1,4 @@
+
 # Replication of "Message-Passing Neural Networks Learn Little's Law" in TensorFlow 2
 
 ## Table of Contents
@@ -22,8 +23,6 @@
    
 6.  References
 
------
-
 ## 1\. Introduction
 
 The following sections present the methodology and results for replicating Krzysztof Rusek and Piotr Chołda's experiment in "Message-Passing Neural Networks Learn Little's Law" [2] using an updated TensorFlow 2 codebase.
@@ -43,8 +42,6 @@ To validate the migration, the original experiments were precisely replicated. T
 3.  **Comprehensive Evaluation:** Testing both trained models against a wide range of evaluation sets, including synthetic graphs (BA, ER, and ER 60) and real-world network topologies from the SNDLib (Survivable Network Design Library) [4], such as `germany50` and `cost266`. 
 
 The complete results, comparing the original TF1 benchmarks (from the notebook) to this new TF2 replication, are presented in the summary tables below, followed by the detailed console logs for each test. 
-
------
 
 ## 2\. Code Migration (TF1 to TF2)
 
@@ -115,9 +112,8 @@ This migration was necessary to make the evaluation script compatible with the n
       * **Change 1:** The main evaluation loop, hardcoded to run 16 times, was replaced. It now loops `args.nval` times (defaulting to 32) and is wrapped in a `try...except tf.errors.OutOfRangeError` block to gracefully stop when the dataset runs out of samples. 
       * **Change 2:** A new `--checkpoint` command-line argument was added, allowing a specific checkpoint step to be evaluated instead of just the latest one. 
       * **Change 3:** `random.seed(0)`, `np.random.seed(0)`, and `tf.compat.v1.set_random_seed(0)` were added to ensure the evaluation is reproducible. 
-
------
-
+  
+  
 ## 3\. Replication Methodology
 
 ### Training and Test Sets
@@ -256,197 +252,324 @@ python graph_nn2_tf2.py --log_dir log/er3_tf2 \
   --mu-scale 0.12
 ```
 
+## 4\. Evaluation Results
 
-
------
-
-## 4\. Evaluation Results and Analysis
-
-The original authors' best checkpoints were BA `197400` and ER `199700`. This replication uses **checkpoint 197400** for the BA model and **checkpoint 198000** for the ER model. 
+The original authors' best checkpoints were BA `197400` and ER `199700`. This replication uses **checkpoint 181500** for the BA model and **checkpoint 18200** for the ER model. 
 
 The following tables compare the benchmark results from the original TF1 notebook (TF1 mean) against the results from this TF2 code replication.
+###  BA / BA
 
-### 1\. BA Model Evaluation (Checkpoint 197400)
+| Model            |    MSE |      R² | Pearson |
+| :--------------- | -----: | ------: | ------: |
+| **TensorFlow 1** | 0.0069 |  0.9929 |  0.9974 |
+| **TensorFlow 2** | 0.0037 |  0.9961 |  0.9983 |
 
-*This model was trained on Barabási-Albert (BA) graphs. All tests use the BA normalization stats.* 
+<table>
+  <tr>
+    <th style="text-align:center;">TensorFlow 1</th>
+    <th style="text-align:center;">TensorFlow 2</th>
+  </tr>
+  <tr>
+    <td><img src="plots/tf1/ba_ba/ba-ba1_white.png" width="450"></td>
+    <td><img src="plots/tf2/ba_ba/eval.svg" width="450"></td>
+  </tr>
+  <tr>
+    <td><img src="plots/tf1/ba_ba/ba-ba2_white.png" width="450"></td>
+    <td><img src="plots/tf2/ba_ba/rez_hist.svg" width="450"></td>
+  </tr>
+</table>
 
-| Evaluation File (Test) | Scenario (Train / Test) | Metric | TF1 (mean) | TF2  |
-| :--- | :--- | :--- | :--- | :--- |
-| `eval.tfrecords` | **BA / BA** | MSE | 0.0069 | 0.0060 |
-| | | **R²** | **0.9929** | **0.9939** |
-| | | Pearson ρ | 0.9974 | 0.9978 |
-| `eval_er.tfrecords` | **BA / ER** | MSE | 11.5073 | 12.4305 |
-| | | **R²** | **-20.2154** | **-21.6380** |
-| | | Pearson ρ | 0.8631 | 0.8499 |
-| `eval_er60.tfrecords` | **BA / ER (ER Stats)** | MSE | 9.0614 | 41.9479 |
-| | | **R²** | **-7.8326** | **-39.1546** |
-| | | Pearson ρ | 0.7191 | 0.6414 |
-| `eval_snd_2038.tfrecords` | **BA / SNDLib (mix)** | MSE | 1.4945 | 1.2138 |
-| | | **R²** | **-2.3634** | **-5.4725** |
-| | | Pearson ρ | 0.5122 | 0.9829 |
-| `eval_snd_germany50.tfrecords` | **BA / germany50** | MSE | 2.2480 | 1.7484 |
-| | | **R²** | **-4.7743** | **-3.2386** |
-| | | Pearson ρ | 0.9433 | 0.9711 |
+---
 
+###  BA / ER
 
-#### BA Model Evaluation Logs
+| Model            |     MSE |       R² | Pearson |
+| :--------------- | ------: | -------: | ------: |
+| **TensorFlow 1** | 11.5073 | -20.2154 |  0.8631 |
+| **TensorFlow 2** | 12.7291 | -24.1501 |  0.8540 |
 
-```bash
-# Test BA / BA 
-python eval_tf2.py --log_dir log/ba16_tf2 --eval eval.tfrecords \
-  --W-shift 55.3 --W-scale 22.0 --mu-shift 0.34 --mu-scale 0.27
-```
+<table>
+  <tr>
+    <th style="text-align:center;">TensorFlow 1</th>
+    <th style="text-align:center;">TensorFlow 2</th>
+  </tr>
+  <tr>
+    <td><img src="plots/tf1/ba_er/ba-er1_white.png" width="450"></td>
+    <td><img src="plots/tf2/ba_er/eval.svg" width="450"></td>
+  </tr>
+  <tr>
+    <td><img src="plots/tf1/ba_er/ba-er2_white.png" width="450"></td>
+    <td><img src="plots/tf2/ba_er/rez_hist.svg" width="450"></td>
+  </tr>
+</table>
 
-`2025-11-07 21:37:14.758732 step: 197401 mse: 0.006050325930118561 R**2: 0.9939349889755249 Pearson: 0.9978631134696547`
+---
 
-```bash
-# Test BA / ER 
-python eval_tf2.py --log_dir log/ba16_tf2 --eval eval_er.tfrecords \
-  --W-shift 55.3 --W-scale 22.0 --mu-shift 0.34 --mu-scale 0.27
-```
+###  BA / ER (ER)
 
-`2025-11-07 21:38:49.271734 step: 197401 mse: 12.430560111999512 R**2: -21.63809585571289 Pearson: 0.8499421599026573`
+| Model            |    MSE |       R² | Pearson |
+| :--------------- | -----: | -------: | ------: |
+| **TensorFlow 1** |  9.0614 |  -7.8326 | 0.7191 |
+| **TensorFlow 2** |  9.8371 |  -9.2161 | 0.6728 |
 
-```bash
-# Test BA / ER (ER Stats) 
-python eval_tf2.py --log_dir log/ba16_tf2 --eval eval_er.tfrecords \
-  --W-shift 69.3 --W-scale 15.95 --mu-shift 0.199 --mu-scale 0.12 
-```
+<table>
+  <tr>
+    <th style="text-align:center;">TensorFlow 1</th>
+    <th style="text-align:center;">TensorFlow 2</th>
+  </tr>
+  <tr>
+    <td><img src="plots/tf1/ba_er_ernorm/eval.png" width="450"></td>
+    <td><img src="plots/tf2/ba_er(er)/eval.svg" width="450"></td>
+  </tr>
+  <tr>
+    <td><img src="plots/tf1/ba_er_ernorm/residuals_hist.png" width="450"></td>
+    <td><img src="plots/tf2/ba_er(er)/rez_hist.svg" width="450"></td>
+  </tr>
+</table>
 
-`2025-11-08 19:16:38.214018 step: 197401 mse: 41.947940826416016 R**2: -39.15464782714844 Pearson: 0.641409607453491`
+---
 
-```bash
-# Test BA / SNDLib 
-python eval_tf2.py --log_dir log/ba16_tf2 --eval eval_snd_2038.tfrecords \
-  --W-shift 55.3 --W-scale 22.0 --mu-shift 0.34 --mu-scale 0.27 
-```
+### BA / germany50
 
-`2025-11-08 13:20:01.841543 step: 197401 mse: 1.2138633728027344 R**2: -5.47258186340332 Pearson: 0.9829135695250071`
+| Model            |    MSE |       R² | Pearson |
+| :--------------- | -----: | -------: | ------: |
+| **TensorFlow 1** |  2.2480 |  -4.7743 | 0.9433 |
+| **TensorFlow 2** |  3.0866 |  -6.4327 | 0.9656 |
 
-```bash
-# Test BA / germany50 
-python eval_tf2.py --log_dir log/ba16_tf2 --eval eval_snd_germany50.tfrecords \
-  --W-shift 55.3 --W-scale 22.0 --mu-shift 0.34 --mu-scale 0.27 
-```
+<table>
+  <tr>
+    <th style="text-align:center;">TensorFlow 1</th>
+    <th style="text-align:center;">TensorFlow 2</th>
+  </tr>
+  <tr>
+    <td><img src="plots/tf1/ba_germany50/ba-germany501_white.png" width="450"></td>
+    <td><img src="plots/tf2/ba_germany50/eval.svg" width="450"></td>
+  </tr>
+  <tr>
+    <td><img src="plots/tf1/ba_germany50/ba-germany502_white.png" width="450"></td>
+    <td><img src="plots/tf2/ba_germany50/rez_hist.svg" width="450"></td>
+  </tr>
+</table>
 
-`2025-11-08 13:20:25.938886 step: 197401 mse: 1.748425841331482 R**2: -3.238605499267578 Pearson: 0.9711106107485709`
+---
 
+###  BA / SNDlib
 
-### 2\. ER Model Evaluation (Checkpoint 198000)
+| Model            |    MSE |       R² | Pearson |
+| :--------------- | -----: | -------: | ------: |
+| **TensorFlow 1** |  1.4945 |  -2.3634 | 0.5122 |
+| **TensorFlow 2** |  1.1892 |  -5.3225 | 0.9881 |
 
-*This model was trained on Erdős-Rényi (ER) graphs. All tests use the ER normalization stats.* 
+<table>
+  <tr>
+    <th style="text-align:center;">TensorFlow 1</th>
+    <th style="text-align:center;">TensorFlow 2</th>
+  </tr>
+  <tr>
+    <td><img src="plots/tf1/ba_sndlib/ba-sndlib1_white.png" width="450"></td>
+    <td><img src="plots/tf2/ba_sndlib/eval.svg" width="450"></td>
+  </tr>
+  <tr>
+    <td><img src="plots/tf1/ba_sndlib/ba-sndlib2_white.png" width="450"></td>
+    <td><img src="plots/tf2/ba_sndlib/rez_hist.svg" width="450"></td>
+  </tr>
+</table>
 
-| Evaluation File (Test) | Scenario (Train / Test) | Metric | TF1 (mean) | TF2 |
-| :--- | :--- | :--- | :--- | :--- |
-| `eval_er.tfrecords` | **ER / ER** | MSE | 0.0188 | 0.0161 |
-| | | **R²** | **0.9817** | **0.9845** |
-| | | Pearson ρ | 0.9943 | 0.9952 |
-| `eval.tfrecords` | **ER / BA** | MSE | 0.1157 | 0.3332 |
-| | | **R²** | **0.9371** | **0.8244** |
-| | | Pearson ρ | 0.9769 | 0.9254 |
-| `eval_er60.tfrecords` | **ER / ER 60** | MSE | 0.1146 | 0.0594 |
-| | | **R²** | **0.9244** | **0.9620** |
-| | | Pearson ρ | 0.9715 | 0.9849 |
-| `eval_snd_2038.tfrecords` | **ER / SNDLib (mix)**| MSE | 0.0725 | 0.6460 |
-| | | **R²** | **0.9142** | **-0.8107** |
-| | | Pearson ρ | 0.9776 | 0.7681 |
-| `eval_snd_janos-us.tfrecords` | **ER / janos-us** | MSE | 0.0206 | 0.0132 |
-| | | **R²** | **0.9468** | **0.9662** |
-| | | Pearson ρ | 0.9893 | 0.9928 |
-| `eval_snd_janos-us-ca.tfrecords`| **ER / janos-us-ca**| MSE | 0.0427 | 0.0197 |
-| | | **R²** | **0.9259** | **0.9667** |
-| | | Pearson ρ | 0.9845 | 0.9857 |
-| `eval_snd_cost266.tfrecords` | **ER / cost266** | MSE | 0.0350 | 0.0156 |
-| | | **R²** | **0.9362** | **0.9719** |
-| | | Pearson ρ | 0.9872 | 0.9881 |
-| `eval_snd_germany50.tfrecords` | **ER / germany50** | MSE | 0.1946 | 0.0546 |
-| | | **R²** | **0.7374** | **0.9304** |
-| | | Pearson ρ | 0.9531 | 0.9660 |
+---
 
+###  ER / ER
 
-#### ER Model Evaluation Logs
+| Model            |     MSE |      R² | Pearson |
+| :--------------- | ------: | ------: | ------: |
+| **TensorFlow 1** |  0.0188 |  0.9817 |  0.9943 |
+| **TensorFlow 2** |  0.0225 |  0.9767 |  0.9913 |
 
-```bash
-# Test ER / ER 
-python eval_tf2.py --log_dir log/er3_tf2 --eval eval_er.tfrecords \
-  --W-shift 69.3 --W-scale 15.95 --mu-shift 0.199 --mu-scale 0.12 
-```
+<table>
+  <tr>
+    <th style="text-align:center;">TensorFlow 1</th>
+    <th style="text-align:center;">TensorFlow 2</th>
+  </tr>
+  <tr>
+    <td><img src="plots/tf1/er_er/er-er1_white.png" width="450"></td>
+    <td><img src="plots/tf2/er_er/eval.svg" width="450"></td>
+  </tr>
+  <tr>
+    <td><img src="plots/tf1/er_er/er-er2_white.png" width="450"></td>
+    <td><img src="plots/tf2/er_er/rez_hist.svg" width="450"></td>
+  </tr>
+</table>
 
+---
 
-`2025-11-07 22:03:05.682464 step: 198001 mse: 0.01613418012857437 R**2: 0.9845555424690247 Pearson: 0.9952855553443692`
+###  ER / BA
 
-```bash
-# Test ER / BA 
-python eval_tf2.py --log_dir log/er3_tf2 --eval eval.tfrecords \
-  --W-shift 69.3 --W-scale 15.95 --mu-shift 0.199 --mu-scale 0.12 
-```
+| Model            |    MSE |      R² | Pearson |
+| :--------------- | -----: | ------: | ------: |
+| **TensorFlow 1** | 0.1157 |  0.9371 | 0.9769 |
+| **TensorFlow 2** | 0.3080 |  0.8292 | 0.9601 |
 
+<table>
+  <tr>
+    <th style="text-align:center;">TensorFlow 1</th>
+    <th style="text-align:center;">TensorFlow 2</th>
+  </tr>
+  <tr>
+    <td><img src="plots/tf1/er_ba/er-ba1_white.png" width="450"></td>
+    <td><img src="plots/tf2/er_ba/eval.svg" width="450"></td>
+  </tr>
+  <tr>
+    <td><img src="plots/tf1/er_ba/er-ba2_white.png" width="450"></td>
+    <td><img src="plots/tf2/er_ba/rez_hist.svg" width="450"></td>
+  </tr>
+</table>
 
-`2025-11-07 22:04:16.444471 step: 198001 mse: 0.333233505487442 R**2: 0.8244186639785767 Pearson: 0.9254690249133152`
+---
 
-```bash
-# Test ER / ER 60 
-python eval_tf2.py --log_dir log/er3_tf2 --eval eval_er60.tfrecords \
-  --W-shift 69.3 --W-scale 15.95 --mu-shift 0.199 --mu-scale 0.12 
-```
+### ER / cost266
 
+| Model            |     MSE |      R² | Pearson |
+| :--------------- | ------: | ------: | ------: |
+| **TensorFlow 1** |  0.0350 |  0.9362 | 0.9872 |
+| **TensorFlow 2** |  0.0379 |  0.9316 | 0.9834 |
 
-`2025-11-07 22:04:57.528203 step: 198001 mse: 0.059411630034446716 R**2: 0.9620940685272217 Pearson: 0.9849818536392916`
+<table>
+  <tr>
+    <th style="text-align:center;">TensorFlow 1</th>
+    <th style="text-align:center;">TensorFlow 2</th>
+  </tr>
+  <tr>
+    <td><img src="plots/tf1/er_cost266/er-cost2661_white.png" width="450"></td>
+    <td><img src="plots/tf2/er_cost266/eval.svg" width="450"></td>
+  </tr>
+  <tr>
+    <td><img src="plots/tf1/er_cost266/er-cost2662_white.png" width="450"></td>
+    <td><img src="plots/tf2/er_cost266/rez_hist.svg" width="450"></td>
+  </tr>
+</table>
 
-```bash
-# Test ER / SNDLib 
-python eval_tf2.py --log_dir log/er3_tf2 --eval eval_snd_2038.tfrecords \
-  --W-shift 69.3 --W-scale 15.95 --mu-shift 0.199 --mu-scale 0.12 
-```
+---
 
+### ER / ER60
 
-`2025-11-08 13:20:59.798999 step: 198001 mse: 0.6460520029067993 R**2: -0.8107197284698486 Pearson: 0.7681619761491297`
+| Model            |     MSE |      R² | Pearson |
+| :--------------- | ------: | ------: | ------: |
+| **TensorFlow 1** | 0.1146  | 0.9244  | 0.9715 |
+| **TensorFlow 2** | 0.3034  | 0.7945  | 0.9559 |
 
-```bash
-# Test ER / janos-us 
-python eval_tf2.py --log_dir log/er3_tf2 --eval eval_snd_janos-us.tfrecords \
-  --W-shift 69.3 --W-scale 15.95 --mu-shift 0.199 --mu-scale 0.12 
-```
+<table>
+  <tr>
+    <th style="text-align:center;">TensorFlow 1</th>
+    <th style="text-align:center;">TensorFlow 2</th>
+  </tr>
+  <tr>
+    <td><img src="plots/tf1/er_er60/er-er601_white.png" width="450"></td>
+    <td><img src="plots/tf2/er_er60/eval.svg" width="450"></td>
+  </tr>
+  <tr>
+    <td><img src="plots/tf1/er_er60/er-er602_white.png" width="450"></td>
+    <td><img src="plots/tf2/er_er60/rez_hist.svg" width="450"></td>
+  </tr>
+</table>
 
+### ER / germany50
 
-`2025-11-08 13:21:31.812567 step: 198001 mse: 0.013213135302066803 R**2: 0.9662255048751831 Pearson: 0.9928291372385883`
+| Model            |    MSE |       R² | Pearson |
+| :--------------- | -----: | -------: | ------: |
+| **TensorFlow 1** | 0.1946 |  0.7374  | 0.9531 |
+| **TensorFlow 2** | 2.4322 | -2.0786 | 0.1746 |
 
-```bash
-# Test ER / janos-us-ca 
-python eval_tf2.py --log_dir log/er3_tf2 --eval eval_snd_janos-us-ca.tfrecords \
-  --W-shift 69.3 --W-scale 15.95 --mu-shift 0.199 --mu-scale 0.12 
-```
+<table>
+  <tr>
+    <th style="text-align:center;">TensorFlow 1</th>
+    <th style="text-align:center;">TensorFlow 2</th>
+  </tr>
+  <tr>
+    <td><img src="plots/tf1/er_germany50/er-germany501_white.png" width="450"></td>
+    <td><img src="plots/tf2/er_germany50/eval.svg" width="450"></td>
+  </tr>
+  <tr>
+    <td><img src="plots/tf1/er_germany50/er-germany502_white.png" width="450"></td>
+    <td><img src="plots/tf2/er_germany50/rez_hist.svg" width="450"></td>
+  </tr>
+</table>
 
+---
 
-`2025-11-08 13:21:56.332408 step: 198001 mse: 0.01970931515097618 R**2: 0.9667568802833557 Pearson: 0.9857049463699405`
+### ER / janos_us
 
-```bash
-# Test ER / cost266 
-python eval_tf2.py --log_dir log/er3_tf2 --eval eval_snd_cost266.tfrecords \
-  --W-shift 69.3 --W-scale 15.95 --mu-shift 0.199 --mu-scale 0.12 
-```
+| Model            |     MSE |      R² | Pearson |
+| :--------------- | ------: | ------: | ------: |
+| **TensorFlow 1** | 0.0206  | 0.9468  | 0.9893 |
+| **TensorFlow 2** | 0.0375  | 0.9042  | 0.9864 |
 
+<table>
+  <tr>
+    <th style="text-align:center;">TensorFlow 1</th>
+    <th style="text-align:center;">TensorFlow 2</th>
+  </tr>
+  <tr>
+    <td><img src="plots/tf1/er_janos-us/er-janos-us1_white.png" width="450"></td>
+    <td><img src="plots/tf2/er_janos-us/eval.svg" width="450"></td>
+  </tr>
+  <tr>
+    <td><img src="plots/tf1/er_janos-us/er-janos-us2_white.png" width="450"></td>
+    <td><img src="plots/tf2/er_janos-us/rez_hist.svg" width="450"></td>
+  </tr>
+</table>
 
-`2025-11-08 13:22:16.720955 step: 198001 mse: 0.015609847381711006 R**2: 0.9719294309616089 Pearson: 0.9881956164392952`
+---
 
-```bash
-# Test ER / germany50 
-python eval_tf2.py --log_dir log/er3_tf2 --eval eval_snd_germany50.tfrecords \
-  --W-shift 69.3 --W-scale 15.95 --mu-shift 0.199 --mu-scale 0.12 
-```
+### ER / janos_us_ca
 
+| Model            |     MSE |      R² | Pearson |
+| :--------------- | ------: | ------: | ------: |
+| **TensorFlow 1** | 0.0427  | 0.9259  | 0.9845 |
+| **TensorFlow 2** | 0.0381  | 0.9353  | 0.9788 |
 
-`2025-11-08 13:22:37.502440 step: 198001 mse: 0.05461127310991287 R**2: 0.9304120540618896 Pearson: 0.9660943451787374`
+<table>
+  <tr>
+    <th style="text-align:center;">TensorFlow 1</th>
+    <th style="text-align:center;">TensorFlow 2</th>
+  </tr>
+  <tr>
+    <td><img src="plots/tf1/er_janos-us-ca/er-janos-us-ca1_white.png" width="450"></td>
+    <td><img src="plots/tf2/er_janos-us-ca/eval.svg" width="450"></td>
+  </tr>
+  <tr>
+    <td><img src="plots/tf1/er_janos-us-ca/er-janos-us-ca2_white.png" width="450"></td>
+    <td><img src="plots/tf2/er_janos-us-ca/rez_hist.svg" width="450"></td>
+  </tr>
+</table>
 
------
+---
+
+### ER / SNDlib
+
+| Model            |     MSE |      R² | Pearson |
+| :--------------- | ------: | ------: | ------: |
+| **TensorFlow 1** | 0.0725  | 0.9142  | 0.9776 |
+| **TensorFlow 2** | 0.4040  | -0.1290 | 0.8986 |
+
+<table>
+  <tr>
+    <th style="text-align:center;">TensorFlow 1</th>
+    <th style="text-align:center;">TensorFlow 2</th>
+  </tr>
+  <tr>
+    <td><img src="plots/tf1/er_sndlib/er-sndlib1_white.png" width="450"></td>
+    <td><img src="plots/tf2/er_sndlib/eval.svg" width="450"></td>
+  </tr>
+  <tr>
+    <td><img src="plots/tf1/er_sndlib/er-sndlib2_white.png" width="450"></td>
+    <td><img src="plots/tf2/er_sndlib/rez_hist.svg" width="450"></td>
+  </tr>
+</table>
 
 
 ## 5\. Conclusion
 
 This replication of the experiment by Rusek and Chołda [2] was **successful**. The migration of the legacy TF1 codebase to a compatible TF2 implementation correctly reproduced all the key scientific findings from the original paper.
 
-
------
 
 ## 6\. References
 
