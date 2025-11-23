@@ -138,6 +138,15 @@ The model was trained on a dataset of **20 000 samples** and with **2 000 sample
 The training process consisted of **200 000 iteractions**, using the same hyperparameters for both APIs to ensure fair comparison.
 
 
+However, during experiments, we observed that the NNX implementation exhibited signs of **overfitting** when trained for the full 200 000 iterations.
+The model achieved very low training error but its validation and cross-dataset generalization performance degraded.
+
+To address this, we reduced the training duration to 100 000 iterations for NNX.
+This significantly improved validation metrics and generalization to unseen graph families.
+
+The Linen implementation did not exhibit this behaviour and was trained for the full 200 000 iterations.
+
+
 Throughout the results section, notation such as BA / ER indicates train -> test pairing:
 
 - **BA / ER** - the model was trained on Barabási-Albert graphs and tested on Erdős-Rényi graphs
