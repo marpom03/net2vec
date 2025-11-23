@@ -318,12 +318,12 @@ The following tables compare the benchmark results from the original TF1 noteboo
     <th style="text-align:center;">TensorFlow 2</th>
   </tr>
   <tr>
-    <td><img src="plots/tf1/ba_er_ernorm/eval.png" width="450"></td>
-    <td><img src="plots/tf2/ba_er(er)/eval.svg" width="450"></td>
+    <td><img src="../mpnn_jax/plots/tf1/ba_er_ernorm/eval.png" width="450"></td>
+    <td><img src="plots/tf2/ba_er_ernorm/eval.svg" width="450"></td>
   </tr>
   <tr>
-    <td><img src="plots/tf1/ba_er_ernorm/residuals_hist.png" width="450"></td>
-    <td><img src="plots/tf2/ba_er(er)/rez_hist.svg" width="450"></td>
+    <td><img src="../mpnn_jax/plots/tf1/ba_er_ernorm/residuals_hist.png" width="450"></td>
+    <td><img src="plots/tf2/ba_er_ernorm/rez_hist.svg" width="450"></td>
   </tr>
 </table>
 
