@@ -12,7 +12,7 @@ Below you can find a detailed instruction on how to prepare the data, train the 
 
 ## Generating samples
 
-First, you need samples to train the model. To generate them, use the samples.py script, which creates three sets of samples:
+First, you need samples to train the model. To generate them, use the **samples.py** script, which creates three sets of samples:
 
 -   training set
 
@@ -21,7 +21,7 @@ First, you need samples to train the model. To generate them, use the samples.py
 -   test set (used after training)
     
 
-The configuration for sample generation is located in the config.py file, with the following settings:
+The configuration for sample generation is located in the **config.py** file, with the following settings:
 
 -   **output_dir** - directory where the generated samples will be saved
     
@@ -46,7 +46,7 @@ The configuration for sample generation is located in the config.py file, with t
 
 ## Training the model
 
-Training is configured through the TrainingConfig class in config.py. The key parameters are:
+Training is configured through the TrainingConfig class in **config.py**. The key parameters are:
 
 -   **train_dataset_path** - directory containing the training samples
     
@@ -85,7 +85,7 @@ python train_nnx.py
 
 ## Testing the model
 
-Before testing, configure the TestConfig section in config.py:
+Before testing, configure the TestConfig section in **config.py**:
 
 -   **test_dataset_path** - directory containing the test samples  
 
