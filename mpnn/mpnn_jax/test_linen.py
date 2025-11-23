@@ -99,7 +99,7 @@ def main():
     plt.savefig(f"{test_cfg.output_path}/residuals_hist.pdf")
     plt.close()
 
-    print(f"Saved eval.pdf and residuals_hist.pdf to {test_cfg.output_path}")
+    print(f"Saved evaluation plots to: {test_cfg.output_path}")
 
 
 if __name__ == "__main__":
