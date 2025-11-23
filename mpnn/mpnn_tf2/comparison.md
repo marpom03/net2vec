@@ -32,9 +32,9 @@ The original implementation for this paper, provided by the authors on GitHub [1
 To validate the migration, the original experiments were precisely replicated. This process follows the methodology from both the scientific paper [2] and the authors' accompanying Jupyter Notebook [3].
 
 1.  **Data Generation:** Creating three categories of datasets based on the authors' specifications:
-      * Training Sets (N=20,000): Used to train the models. 
+      * Training Sets (N=20 000): Used to train the models. 
       * Test Sets (N=200): Used for periodic validation during training. 
-      * Evaluation Sets (N=202,753): Used for the final performance analysis. 
+      * Evaluation Sets (N=2 000): Used for the final performance analysis. 
 
 2.  **Model Training:** Training two separate Message-Passing Neural Network (MPNN) models for 200,000 iterations each:
       * One model trained on synthetic Barabási-Albert (BA) graphs. 
