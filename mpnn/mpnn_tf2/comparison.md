@@ -131,7 +131,7 @@ python samples_tf2.py -o train_ba.tfrecords -N 20000 -n 40 --rmax 0.9 -g ba -s 1
 
 ```bash
 # BA Test Set (200 samples)
-python samples_tf2.py -o test_ba.tfrecords -N 200 -n 40 --rmax 0.9 -g ba -s 1002
+python samples_tf2.py -o test_ba.tfrecords -N 2000 -n 40 --rmax 0.9 -g ba -s 1002
 ```
 
 
@@ -147,34 +147,34 @@ python samples_tf2.py -o train_er.tfrecords -N 20000 -n 40 --rmax 0.9 -g er -s 2
 
 ```bash
 # ER Test Set (200 samples)
-python samples_tf2.py -o test_er.tfrecords -N 200 -n 40 --rmax 0.9 -g er -s 2002
+python samples_tf2.py -o test_er.tfrecords -N 2000 -n 40 --rmax 0.9 -g er -s 2002
 ```
 
 
 
 ### Evaluation Sets
 
-Following the original authors' notebook, large evaluation sets (N=202,753) were generated for the final analysis. 
+Following the original authors' notebook, evaluation sets were generated for the final analysis. 
 
 **Synthetic Graphs:**
 
 ```bash
 # Evaluation BA (n=10-40):
-python samples_tf2.py -o eval.tfrecords -N 202753 -n 40 --rmax 0.9 -g ba -s 9001
+python samples_tf2.py -o eval.tfrecords -N 2000 -n 40 --rmax 0.9 -g ba -s 9001
 ```
 
 
 
 ```bash
 # Evaluation ER (n=40):
-python samples_tf2.py -o eval_er.tfrecords -N 202753 -n 40 --rmax 0.9 -g er -s 9002
+python samples_tf2.py -o eval_er.tfrecords -N 2000 -n 40 --rmax 0.9 -g er -s 9002
 ```
 
 
 
 ```bash
 # Evaluation ER (n=60):
-python samples_tf2.py -o eval_er60.tfrecords -N 202753 -n 60 --rmax 0.9 -g er -s 9003
+python samples_tf2.py -o eval_er60.tfrecords -N 2000 -n 60 --rmax 0.9 -g er -s 9003
 ```
 
 
@@ -183,7 +183,7 @@ python samples_tf2.py -o eval_er60.tfrecords -N 202753 -n 60 --rmax 0.9 -g er -s
 
 ```bash
 # Evaluation SNDLib (Mixed Set):
-python samples_tf2.py -o eval_snd_2038.tfrecords -N 202753 --rmax 0.9 -g snd -s 9004 \
+python samples_tf2.py -o eval_snd_2038.tfrecords -N 2000 --rmax 0.9 -g snd -s 9004 \
     --sndlib sndlib/sndlib-networks-xml/cost266.xml \
     --sndlib sndlib/sndlib-networks-xml/france.xml \
     --sndlib sndlib/sndlib-networks-xml/geant.xml \
@@ -199,16 +199,16 @@ python samples_tf2.py -o eval_snd_2038.tfrecords -N 202753 --rmax 0.9 -g snd -s 
 
 ```bash
 # Evaluation (Individual SNDLib Networks):
-python samples_tf2.py -o eval_snd_janos-us.tfrecords -N 202753 -n 40 --rmax 0.9 -g snd -s 9005 \
+python samples_tf2.py -o eval_snd_janos-us.tfrecords -N 2000 -n 40 --rmax 0.9 -g snd -s 9005 \
     --sndlib sndlib/sndlib-networks-xml/janos-us.xml
 
-python samples_tf2.py -o eval_snd_janos-us-ca.tfrecords -N 202753 -n 40 --rmax 0.9 -g snd -s 9006 \
+python samples_tf2.py -o eval_snd_janos-us-ca.tfrecords -N 2000 -n 40 --rmax 0.9 -g snd -s 9006 \
     --sndlib sndlib/sndlib-networks-xml/janos-us-ca.xml
 
-python samples_tf2.py -o eval_snd_cost266.tfrecords -N 202753 -n 40 --rmax 0.9 -g snd -s 9007 \
+python samples_tf2.py -o eval_snd_cost266.tfrecords -N 2000 -n 40 --rmax 0.9 -g snd -s 9007 \
     --sndlib sndlib/sndlib-networks-xml/cost266.xml
 
-python samples_tf2.py -o eval_snd_germany50.tfrecords -N 202753 -n 40 --rmax 0.9 -g snd -s 9008 \
+python samples_tf2.py -o eval_snd_germany50.tfrecords -N 2000 -n 40 --rmax 0.9 -g snd -s 9008 \
     --sndlib sndlib/sndlib-networks-xml/germany50.xml
 ```
 
