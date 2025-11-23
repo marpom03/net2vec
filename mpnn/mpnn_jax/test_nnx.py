@@ -85,7 +85,7 @@ def main():
     plt.ylabel("Predicted label")
     plt.title("Evaluation")
     plt.grid(True)
-    plt.savefig(f"{test_cfg.output_path}/eval.pdf")
+    plt.savefig(f"{test_cfg.output_path}/eval.svg", format="svg")
     plt.close()
 
     # Histogram residuals
@@ -93,10 +93,10 @@ def main():
     plt.hist((labels - preds), bins=50)
     plt.title("Histogram of residuals")
     plt.grid(True)
-    plt.savefig(f"{test_cfg.output_path}/residuals_hist.pdf")
+    plt.savefig(f"{test_cfg.output_path}/residuals_hist.svg", format="svg")
     plt.close()
 
-    print(f"Saved eval.pdf and residuals_hist.pdf to {test_cfg.output_path}")
+    print(f"Saved evaluation plots to: {test_cfg.output_path}")
 
 if __name__ == "__main__":
     main()
