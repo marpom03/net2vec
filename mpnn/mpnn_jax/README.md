@@ -134,6 +134,18 @@ Each evaluation reports:
 - **R²**
 - **Pearson correlation**
 
+The model was trained on a dataset of **20 000 samples** and with **2 000 samples** used for validation during training.
+The training process consisted of **200 000 iteractions**, using the same hyperparameters for both APIs to ensure fair comparison.
+
+
+Throughout the results section, notation such as BA / ER indicates train -> test pairing:
+
+- **BA / ER** - the model was trained on Barabási-Albert graphs and tested on Erdős-Rényi graphs
+
+- **BA / SNDlib** - the model was trained on BA synthetic graphs and evaluated on real SNDlib topologies
+
+and analogously for all other combinations
+
 ---
 
 ### BA / BA
