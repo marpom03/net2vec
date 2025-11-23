@@ -134,9 +134,7 @@ Each evaluation reports:
 - **R²**
 - **Pearson correlation**
 
-The model was trained on a dataset of **20 000 samples** and with **2 000 samples** used for validation during training.
-The training process consisted of **200 000 iteractions**, using the same hyperparameters for both APIs to ensure fair comparison.
-
+The models were trained on three separate datasets: **20 000** samples for training, **200** samples for validation during training, and **2 000** samples for testing. The training process consisted of **200 000** iterations, using the same hyperparameters for both APIs to ensure a fair comparison.
 
 However, during experiments, we observed that the NNX implementation exhibited signs of **overfitting** when trained for the full 200 000 iterations.
 The model achieved very low training error but its validation and cross-dataset generalization performance degraded.
