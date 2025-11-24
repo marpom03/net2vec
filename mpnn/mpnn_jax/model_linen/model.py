@@ -127,14 +127,14 @@ class ReadoutLayer(nn.Module):
 class MPNN(nn.Module):
     """
     Full Message Passing Neural Network:
-      1. Initialize node hidden state h0 = concat([x, zeros])  sothat dim = N_H.
+      1. Initialize node hidden state h0 = concat([x, zeros])  so that dim = N_H.
       2. Apply `num_passes` rounds of message passing + GRU update.
       3. Apply gated readout and regress a graph-level scalar.
     """
-    hidden_dim: int   # args.Mhid (np. 8)
-    N_H: int          # 2 + N_PAD = np. 14
-    rn: int           # args.rn (np. 8)
-    num_passes: int   # args.N_PAS (np. 4)
+    hidden_dim: int   # args.Mhid (e.g. 8)
+    N_H: int          # 2 + N_PAD = e.g. 14
+    rn: int           # args.rn (e.g. 8)
+    num_passes: int   # args.N_PAS (e.g. 4)
 
     @nn.compact
     def __call__(self, inputs):
