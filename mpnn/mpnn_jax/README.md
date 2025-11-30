@@ -134,15 +134,7 @@ Each evaluation reports:
 - **R²**
 - **Pearson correlation**
 
-The models were trained on three separate datasets: **20 000** samples for training, **200** samples for validation during training, and **2 000** samples for testing. The training process consisted of **200 000** iterations, using the same hyperparameters for both APIs to ensure a fair comparison.
-
-However, during experiments, we observed that the NNX implementation exhibited signs of **overfitting** when trained for the full 200 000 iterations.
-The model achieved very low training error but its validation and cross-dataset generalization performance degraded.
-
-To address this, we reduced the training duration to 100 000 iterations for NNX.
-This significantly improved validation metrics and generalization to unseen graph families.
-
-The Linen implementation did not exhibit this behaviour and was trained for the full 200 000 iterations.
+The training procedure followed the setup described in the original paper. Each model was trained on three separate datasets: **20 000** samples for training, **200** samples for validation during training, and **2 000** samples for testing. The training process consisted of **200 000** iterations, using the same hyperparameters for both APIs to ensure a fair comparison.
 
 
 Throughout the results section, notation such as BA / ER indicates train -> test pairing:
@@ -160,8 +152,8 @@ and analogously for all other combinations
 | Model            |     MSE |      R² | Pearson |
 | :--------------- | ------: | ------: | ------: |
 | **TensorFlow 1** |  0.0069 |  0.9929 |  0.9974 |
-| **JAX Linen**    |  0.0045 |  0.9953 |  0.9977 |
-| **JAX NNX**      |  0.0086 |  0.9911 |  0.9958 |
+| **JAX Linen**    |  0.0043 |  0.9954 |  0.9978 |
+| **JAX NNX**      |  0.0054 |  0.9943 |  0.9975 |
 
 
 <table>
@@ -191,8 +183,8 @@ and analogously for all other combinations
 | Model            |    MSE |       R² | Pearson |
 | :--------------- | -----: | -------: | ------: |
 | **TensorFlow 1** | 11.5073 | -20.2154 |  0.8631 |
-| **JAX Linen**    |  4.8763 |  -8.2365 | 0.7780 |
-| **JAX NNX**      |  8.3694 |  -14.8528 | 0.8802 |
+| **JAX Linen**    |  12.4450 |  -22.5724 | 0.7992 |
+| **JAX NNX**      |  10.5444 | -18.9725 | 0.8056 |
 <table>
   <tr>
     <th style="text-align:center;">TensorFlow 1</th>
@@ -218,8 +210,8 @@ and analogously for all other combinations
 | Model            |    MSE |       R² | Pearson |
 | :--------------- | -----: | -------: | ------: |
 | **TensorFlow 1** |  9.0614 |  -7.8326 | 0.7191 |
-| **JAX Linen**    |  3.5365 |  -2.5210 | 0.7489 |
-| **JAX NNX**      |  9.0358 |  -7.9961 | 0.6737 |
+| **JAX Linen**    |  16.074 |  -15.0038  | 0.6738 |
+| **JAX NNX**      |  10.5440 |  -18.9730  | 0.8060 |
 <table>
   <tr>
     <th style="text-align:center;">TensorFlow 1</th>
@@ -245,8 +237,8 @@ and analogously for all other combinations
 | Model            |     MSE |      R² | Pearson |
 | :--------------- | ------: | -------: | ------: |
 | **TensorFlow 1** |   2.2480 |  -4.7743 | 0.9433 |
-| **JAX Linen**    |   0.6070 |  -0.5721 | 0.4099 |
-| **JAX NNX**      |   1.7945 |  -3.6471 | 0.9318 |
+| **JAX Linen**    |   2.0744 | -4.3719 | 0.9256 |
+| **JAX NNX**      |   2.1572 |  -4.5864 | 0.8830 |
 
 <table>
   <tr>
@@ -274,8 +266,8 @@ and analogously for all other combinations
 | Model            |     MSE |       R² | Pearson |
 | :--------------- | ------: | -------: | ------: |
 | **TensorFlow 1** |   1.4945 |  -2.3634 | 0.5122 |
-| **JAX Linen**    |   1.0193 |  -1.1309 | 0.5637 |
-| **JAX NNX**      |   1.0474 |  -1.1896 | 0.5518 |
+| **JAX Linen**    |   1.5623 |  -2.2661 | 0.4808 |
+| **JAX NNX**      |   1.9015 |  -2.9751 | 0.4662 |
 
 
 <table>
@@ -303,8 +295,8 @@ and analogously for all other combinations
 | Model            |     MSE |      R² | Pearson |
 | :--------------- | ------: | ------: | ------: |
 | **TensorFlow 1** |  0.0188 |  0.9817 |  0.9943 |
-| **JAX Linen**    |  0.0128 |  0.9871 |  0.9939 |
-| **JAX NNX**      |  0.0226 |  0.9774 |  0.9906 |
+| **JAX Linen**    |  0.0124 |  0.9876 |  0.9952 |
+| **JAX NNX**      |  0.0143 |  0.9857 |  0.9935 |
 
 
 
@@ -332,9 +324,9 @@ and analogously for all other combinations
 
 | Model            |    MSE |     R² | Pearson |
 | :--------------- | -----: | -----: | ------: |
-| **TensorFlow 1** | 0.1157 |  0.9371 | 0.9769 |
-| **JAX Linen**    | 0.2291 | 0.8757 | 0.9422 |
-| **JAX NNX**      | 0.2397 | 0.7472 | 0.9407 |
+| **TensorFlow 1** | 0.1157 | 0.9371 | 0.9769 |
+| **JAX Linen**    | 0.4211 | 0.7716 | 0.9124 |
+| **JAX NNX**      | 0.7545 | 0.5908 | 0.8964 |
 
 
 
@@ -363,9 +355,9 @@ and analogously for all other combinations
 
 | Model            |     MSE |      R² | Pearson |
 | :--------------- | ------: | ------: | ------: |
-| **TensorFlow 1** |  0.1146  | 0.9244	  |  0.9715 |
-| **JAX Linen**    |  0.0647 |  0.9569 |  0.9798 |
-| **JAX NNX**      |  0.0800 |  0.9467 |  0.9767 |
+| **TensorFlow 1** |  0.1146 |  0.9244 |  0.9715 |
+| **JAX Linen**    |  0.1338 |  0.9108 |  0.9633 |
+| **JAX NNX**      |  0.0810 |  0.9460 |  0.9767 |
 
 
 <table>
@@ -394,8 +386,8 @@ and analogously for all other combinations
 | Model            |     MSE |      R² | Pearson |
 | :--------------- | ------: | ------: | ------: |
 | **TensorFlow 1** |  0.0206 | 0.9468 |  0.9893 |
-| **JAX Linen**    |  0.0119 | 0.9689 | 0.9871 |
-| **JAX NNX**      |  0.0188 | 0.9509 | 0.9797 |
+| **JAX Linen**    |  0.0224 | 0.9415 | 0.9929 |
+| **JAX NNX**      |  0.0113 | 0.9705 | 0.9897 |
 
 <table>
   <tr>
@@ -423,8 +415,8 @@ and analogously for all other combinations
 | Model            |     MSE |     R² | Pearson |
 | :--------------- | ------: | -----: | ------: |
 | **TensorFlow 1** |  0.1946 |  0.7374 | 0.9531 |
-| **JAX Linen**    |  0.1063 |  0.8552 | 0.9525 |
-| **JAX NNX**      |  0.1857 |  0.7472 | 0.9594 |
+| **JAX Linen**    |  0.3144 |  0.5719 | 0.8872 |
+| **JAX NNX**      |  0.4891 |  0.3341 | 0.8817 |
 
 
 
@@ -455,8 +447,8 @@ and analogously for all other combinations
 | Model            |     MSE |      R² | Pearson |
 | :--------------- | ------: | ------: | ------: |
 | **TensorFlow 1** |  0.0350 | 0.9362 | 0.9872 |
-| **JAX Linen**    |  0.0164 | 0.9695 | 0.9852 |
-| **JAX NNX**      |  0.0364 | 0.9326 | 0.9771 |
+| **JAX Linen**    |  0.0124 | 0.9768 | 0.9887 |
+| **JAX NNX**      |  0.0148 | 0.9725 | 0.9879 |
 
 <table>
   <tr>
@@ -484,8 +476,8 @@ and analogously for all other combinations
 | Model            |     MSE |      R² | Pearson |
 | :--------------- | ------: | ------: | ------: |
 | **TensorFlow 1** |  0.0427 | 0.9259 | 0.9845 |
-| **JAX Linen**    |  0.0229 | 0.9591 | 0.9816 |
-| **JAX NNX**      |  0.0396 | 0.9294 | 0.9736 |
+| **JAX Linen**    |  0.0198 | 0.9646 | 0.9849 |
+| **JAX NNX**      |  0.0190 | 0.9660 | 0.9840 |
 
 
 <table>
@@ -513,8 +505,8 @@ and analogously for all other combinations
 | Model            |     MSE |      R² | Pearson |
 | :--------------- | ------: | ------: | ------: |
 | **TensorFlow 1** |  0.0725 | 0.9142 | 0.9776 |
-| **JAX Linen**    |  0.0538 | 0.9408 | 0.9723 |
-| **JAX NNX**      |  0.0453 | 0.9501 | 0.9790 |
+| **JAX Linen**    |  0.0419 | 0.9538 | 0.9834 |
+| **JAX NNX**      |  0.0515 | 0.9433 | 0.9768 |
 
 
 <table>
