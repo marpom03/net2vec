@@ -14,12 +14,8 @@ def evaluate_model(params, model, graphs, batch_size=64, seed=0):
     """
     Run batched evaluation on a list of graphs.
     """
-
-    max_nodes = max(int(g.n_node[0]) for g in graphs)
-    max_edges = max(int(g.n_edge[0]) for g in graphs)
-
     key = jax.random.key(seed)
-    test_loader = make_loader(graphs, max_nodes, max_edges, batch_size, key)
+    test_loader = make_loader(graphs, batch_size, key)
 
     preds_list = []
     labels_list = []
@@ -27,8 +23,8 @@ def evaluate_model(params, model, graphs, batch_size=64, seed=0):
     num_batches = (len(graphs) + batch_size - 1) // batch_size
     for _ in range(num_batches):
 
-        (batch_graph, nmask, emask), key = next(test_loader)
-        batch_preds  = model.apply(params, (batch_graph, nmask, emask)).squeeze()
+        batch_graph, key = next(test_loader)
+        batch_preds  = model.apply(params, batch_graph).squeeze()
         batch_labels = batch_graph.globals.squeeze()
 
         preds_list.append(batch_preds)
@@ -88,7 +84,7 @@ def main():
     plt.ylabel("Predicted label")
     plt.title("Evaluation")
     plt.grid(True)
-    plt.savefig(f"{test_cfg.output_path}/eval.pdf")
+    plt.savefig(f"{test_cfg.output_path}/eval.svg", format="svg")
     plt.close()
 
     # Histogram residuals
@@ -96,7 +92,7 @@ def main():
     plt.hist((labels - preds), bins=50)
     plt.title("Histogram of residuals")
     plt.grid(True)
-    plt.savefig(f"{test_cfg.output_path}/residuals_hist.pdf")
+    plt.savefig(f"{test_cfg.output_path}/residuals_hist.svg", format="svg")
     plt.close()
 
     print(f"Saved evaluation plots to: {test_cfg.output_path}")
@@ -104,4 +100,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

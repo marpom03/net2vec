@@ -5,6 +5,7 @@ import jraph
 from flax import nnx
 from jax import nn as jnn
 import jax.ops as jops
+import jraph
 
 def _init_node_state(node_features: jnp.ndarray, N_PAD: int) -> jnp.ndarray:
     """
@@ -68,7 +69,7 @@ class MessagePassingLayer(nnx.Module):
         self.N_H = N_H
         self.msg = MessageFunction(hidden_dim=hidden_dim, N_H=N_H, rngs=rngs)
 
-    def __call__(self, graph: jraph.GraphsTuple, edge_mask: jnp.ndarray) -> jnp.ndarray:
+    def __call__(self, graph: jraph.GraphsTuple) -> jnp.ndarray:
         h = graph.nodes               # (N, N_H)
         e = graph.edges               # (E, 1)
         senders = jnp.asarray(graph.senders, dtype=jnp.int32)     # (E,)
@@ -77,8 +78,9 @@ class MessagePassingLayer(nnx.Module):
         h_i = jnp.take(h, senders, axis=0)  # (E, N_H)
         m_ij = self.msg(h_i, e)             # (E, N_H)
 
-        if edge_mask is not None:
-            m_ij = m_ij * edge_mask.astype(m_ij.dtype)
+        edge_mask = jraph.get_edge_padding_mask(graph).astype(m_ij.dtype)
+        edge_mask = edge_mask.reshape((-1, 1))
+        m_ij = m_ij * edge_mask
 
         m_j = jops.segment_sum(m_ij, receivers, num_segments=h.shape[0])  # (N, N_H)
         return m_j
@@ -119,7 +121,7 @@ class ReadoutLayer(nnx.Module):
         self.h1 = nnx.Linear(rn, rn, rngs=rngs)
         self.h2 = nnx.Linear(rn, 1, rngs=rngs)
 
-    def __call__(self, graph: jraph.GraphsTuple, node_mask: jnp.ndarray):
+    def __call__(self, graph: jraph.GraphsTuple):
         h = graph.nodes            # (N, N_H)
         x = graph.nodes[:, :2]     
         hx = jnp.concatenate([h, x], axis=-1)  # (N, N_H+2)
@@ -131,8 +133,9 @@ class ReadoutLayer(nnx.Module):
         j_out = self.j2(j_out)
 
         RR = jnn.sigmoid(i_out) * j_out  # (N, rn)
-        if node_mask is not None:
-            RR = RR * node_mask.astype(RR.dtype)
+        node_mask = jraph.get_node_padding_mask(graph).astype(RR.dtype)
+        node_mask = node_mask.reshape((-1, 1))
+        RR = RR * node_mask
 
         graph_idx = _graph_indices_from_n_node(graph)
         pooled = jops.segment_sum(RR, graph_idx, num_segments=graph.n_node.shape[0])  # (B, rn)
@@ -163,15 +166,13 @@ class MPNN_NNX(nnx.Module):
         self.upd = NodeUpdateLayer(N_H=N_H, rngs=rngs)
         self.readout = ReadoutLayer(rn=rn, N_H=N_H, rngs=rngs)
 
-    def __call__(self, inputs: Tuple[jraph.GraphsTuple, jnp.ndarray, jnp.ndarray]):
-        graph, node_mask, edge_mask = inputs
-
+    def __call__(self, graph: jraph.GraphsTuple):
         h0 = _init_node_state(graph.nodes, self.N_H - 2)
         graph = graph._replace(nodes=h0)
 
         for _ in range(self.num_passes):
-            m_j = self.mp(graph, edge_mask)
+            m_j = self.mp(graph)
             h_new = self.upd(graph.nodes, m_j)
             graph = graph._replace(nodes=h_new)
 
-        return self.readout(graph, node_mask)
+        return self.readout(graph)

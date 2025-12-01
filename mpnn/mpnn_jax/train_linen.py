@@ -23,8 +23,10 @@ def loss_fn(params, batch):
     """
     Compute the MSE loss.
     """
-    preds = model.apply(params, batch)                 
-    labels = batch[0].globals.squeeze()                
+    preds = model.apply(params, batch)
+    labels = batch.globals.squeeze()
+    preds = preds[:-1]
+    labels = labels[:-1]
     loss = jnp.mean((preds - labels)**2)
     return loss, preds
 
@@ -60,17 +62,14 @@ if __name__ == "__main__":
     W_mean = float(norm.W_shift)
     W_std  = float(norm.W_scale)
 
-    max_nodes = max(int(g.n_node[0]) for g in graphs)
-    max_edges = max(int(g.n_edge[0]) for g in graphs)
-
     key = jax.random.key(cfg.seed)
 
     BATCH_SIZE = cfg.batch_size
-    train_loader = make_loader(graphs, max_nodes, max_edges, BATCH_SIZE, key)
-    val_loader = make_loader(eval_graphs, max_nodes, max_edges, BATCH_SIZE, key)
+    train_loader = make_loader(graphs, BATCH_SIZE, key)
+    val_loader = make_loader(eval_graphs, BATCH_SIZE, key)
 
-    (batch_graph, nmask, emask), key = next(train_loader)
-    params = model.init(key, (batch_graph, nmask, emask))
+    batch_graph, key = next(train_loader)
+    params = model.init(key, batch_graph)
 
     optimizer = optax.rmsprop(learning_rate=cfg.learning_rate)
     opt_state = optimizer.init(params)
@@ -85,11 +84,11 @@ if __name__ == "__main__":
 
     try:
         for step in trange(cfg.steps, desc="Model training"):
-            (batch_graph, nmask, emask), key = next(train_loader)
-            params, opt_state, loss = train_step(params, opt_state, (batch_graph, nmask, emask))
+            batch_graph, key = next(train_loader)
+            params, opt_state, loss = train_step(params, opt_state, batch_graph)
 
             if step % cfg.log_interval == 1:
-                preds  = model.apply(params, (batch_graph, nmask, emask))
+                preds  = model.apply(params, batch_graph)
                 labels = batch_graph.globals.squeeze()
 
                 mse_val = mse(labels, preds)
@@ -101,8 +100,8 @@ if __name__ == "__main__":
                     f"MAE={mae_val:.6f}  "
                     f"R²={r2_val:.6f}")
                 
-                (val_graph, vnmask, vemask), key = next(val_loader)
-                val_preds  = model.apply(params, (val_graph, vnmask, vemask))
+                val_graph, key = next(val_loader)
+                val_preds  = model.apply(params, val_graph)
                 val_labels = val_graph.globals.squeeze()
 
                 val_mse = mse(val_labels, val_preds)

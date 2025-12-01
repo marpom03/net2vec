@@ -3,6 +3,7 @@ import jax.numpy as jnp
 import flax.linen as nn
 import jraph
 
+
 def init_node_state(node_features, N_PAD):
     """
     Initialize hidden node state by padding input features with zeros.
@@ -54,7 +55,7 @@ class MessagePassingLayer(nn.Module):
     N_H: int
 
     @nn.compact
-    def __call__(self, graph: jraph.GraphsTuple, edge_mask):
+    def __call__(self, graph: jraph.GraphsTuple):
         """
         graph.nodes:     (N_total, N_H)
         graph.edges:     (E_total, 1)
@@ -71,7 +72,9 @@ class MessagePassingLayer(nn.Module):
 
         m_ij = MessageFunction(self.hidden_dim, self.N_H)(h_i, e)   # (E, N_H)
 
-        m_ij = m_ij * edge_mask.astype(m_ij.dtype)
+        edge_mask = jraph.get_edge_padding_mask(graph).astype(m_ij.dtype)
+        edge_mask = edge_mask.reshape((-1, 1))
+        m_ij = m_ij * edge_mask
 
         m_j = jax.ops.segment_sum(m_ij, receivers, num_segments=h.shape[0])   # (N, N_H)
 
@@ -103,7 +106,7 @@ class ReadoutLayer(nn.Module):
     N_H: int     
 
     @nn.compact
-    def __call__(self, graph, node_mask):
+    def __call__(self, graph):
         h = graph.nodes          # (N, N_H)
         x = graph.nodes[:, :2]   
         hx = jnp.concatenate([h, x], axis=-1)  # (N, N_H+2)
@@ -115,7 +118,10 @@ class ReadoutLayer(nn.Module):
         j_out = nn.Dense(self.rn)(j_out)
 
         RR = nn.sigmoid(i_out) * j_out   # (N, rn)
-        RR = RR * node_mask.astype(RR.dtype)
+
+        node_mask = jraph.get_node_padding_mask(graph).astype(RR.dtype)
+        node_mask = node_mask.reshape((-1, 1))
+        RR = RR * node_mask
 
         graph_idx = graph_indices_from_n_node(graph)
         pooled = jax.ops.segment_sum(RR, graph_idx, num_segments=graph.n_node.shape[0])
@@ -137,16 +143,16 @@ class MPNN(nn.Module):
     num_passes: int   # args.N_PAS (e.g. 4)
 
     @nn.compact
-    def __call__(self, inputs):
-        graph, node_mask, edge_mask = inputs
+    def __call__(self, graph: jraph.GraphsTuple):
         h0 = init_node_state(graph.nodes, self.N_H - 2)
         graph = graph._replace(nodes=h0)
+        message_passing_layer = MessagePassingLayer(self.hidden_dim, self.N_H)
+        node_update_layer = NodeUpdateLayer(self.N_H)
 
         for _ in range(self.num_passes):
-            m_j = MessagePassingLayer(self.hidden_dim, self.N_H)(graph, edge_mask)
+            m_j = message_passing_layer(graph)
             h_old = graph.nodes
-            h_new = NodeUpdateLayer(self.N_H)(h_old, m_j)
+            h_new = node_update_layer(h_old, m_j)
             graph = graph._replace(nodes=h_new)
 
-        return ReadoutLayer(self.rn, self.N_H)(graph, node_mask)
-
+        return ReadoutLayer(self.rn, self.N_H)(graph)

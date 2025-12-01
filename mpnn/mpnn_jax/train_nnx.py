@@ -51,19 +51,23 @@ def build_apply_fn(graphdef, frozen_state, mask):
       - static graph definition (`graphdef`),
       - partial state composed of current `params` + `frozen_state`.
     """
-    def apply_fn(params, batch):
+    def apply_fn(params, batch_graph):
         full_state = combine_state(params, frozen_state, mask)
         model = nnx.merge(graphdef, full_state)
-        return model(batch)  # batch = (graph, node_mask, edge_mask)
+        return model(batch_graph)  # batch_graph = GraphsTuple
     return apply_fn
 
 def build_loss_fn(apply_fn):    
     """
     Wrap the forward pass with MSE loss in normalized label space.
     """
-    def loss_fn(params, batch):
-        preds = apply_fn(params, batch)
-        labels = batch[0].globals.squeeze()   
+    def loss_fn(params, batch_graph):
+        preds = apply_fn(params, batch_graph)
+        labels = batch_graph.globals.squeeze()
+
+        preds = preds[:-1]
+        labels = labels[:-1]
+        
         loss = jnp.mean((preds - labels) ** 2)
         return loss, preds
     return jax.jit(loss_fn)
@@ -91,15 +95,12 @@ if __name__ == "__main__":
     W_mean = float(norm.W_shift)
     W_std  = float(norm.W_scale)
 
-    max_nodes = max(int(g.n_node[0]) for g in graphs)
-    max_edges = max(int(g.n_edge[0]) for g in graphs)
-
     key = jax.random.key(cfg.seed)
     BATCH_SIZE = cfg.batch_size
-    train_loader = make_loader(graphs, max_nodes, max_edges, BATCH_SIZE, key)
-    val_loader = make_loader(eval_graphs, max_nodes, max_edges, BATCH_SIZE, key)
+    train_loader = make_loader(graphs, BATCH_SIZE, key)
+    val_loader = make_loader(eval_graphs, BATCH_SIZE, key)
 
-    (example_graph, nmask, emask), key = next(train_loader)
+    example_graph, key = next(train_loader)
     rngs = nnx.Rngs(params=key)
     model = MPNN_NNX(
         hidden_dim=model_cfg.hidden_dim,
@@ -128,13 +129,11 @@ if __name__ == "__main__":
 
     try:
         for step in trange(cfg.steps, desc="Model training"):
-            (batch_graph, nmask, emask), key = next(train_loader)
-            batch = (batch_graph, nmask, emask)
-
-            params, opt_state, loss = train_step(params, opt_state, batch)
+            batch_graph, key = next(train_loader)
+            params, opt_state, loss = train_step(params, opt_state, batch_graph)
 
             if step % cfg.log_interval == 1:
-                preds  = apply_fn(params, batch)
+                preds  = apply_fn(params, batch_graph)
                 labels = batch_graph.globals.squeeze()
 
                 mse_val = mse(labels, preds)
@@ -143,9 +142,8 @@ if __name__ == "__main__":
 
                 tqdm.write(f"[TRAIN step {step:05d}] MSE={mse_val:.6f}  MAE={mae_val:.6f}  R²={r2_val:.6f}")
 
-                (val_graph, vnmask, vemask), key = next(val_loader)
-                val_batch = (val_graph, vnmask, vemask)
-                val_preds  = apply_fn(params, val_batch)
+                val_graph, key = next(val_loader)
+                val_preds  = apply_fn(params, val_graph)
                 val_labels = val_graph.globals.squeeze()
 
                 val_mse = mse(val_labels, val_preds)
@@ -199,4 +197,3 @@ if __name__ == "__main__":
         W_mean,
         W_std,
     )
-

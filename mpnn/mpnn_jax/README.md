@@ -123,6 +123,44 @@ After testing, two plots will be saved in output_path:
 ### **Histogram of Residuals**  
    A histogram showing the distribution of prediction errors (predicted - true).  
     A narrow peak near zero indicates low residuals and good model performance.
+
+## Training curves
+
+The plots below show how the loss decreases over time for both graph models (BA and ER) and both JAX APIs (Linen and NNX). Each curve is computed from raw MSE values logged during training.
+
+### Barabási-Albert (BA) training
+
+<table>
+  <tr>
+    <th style="text-align:center;">JAX Linen</th>
+    <th style="text-align:center;">JAX NNX</th>
+  </tr>
+  <tr>
+    <td style="text-align:center;">
+      <img src="plots/training_curves/training_curve_linen_ba.svg" width="450">
+    </td>
+    <td style="text-align:center;">
+      <img src="plots/training_curves/training_curve_nnx_ba.svg" width="450">
+    </td>
+  </tr>
+</table>
+
+### Erdős-Rényi (ER) training
+
+<table>
+  <tr>
+    <th style="text-align:center;">JAX Linen</th>
+    <th style="text-align:center;">JAX NNX</th>
+  </tr>
+  <tr>
+    <td style="text-align:center;">
+      <img src="plots/training_curves/training_curve_linen_er.svg" width="450">
+    </td>
+    <td style="text-align:center;">
+      <img src="plots/training_curves/training_curve_nnx_er.svg" width="450">
+    </td>
+  </tr>
+</table>
     
 # Evaluation Results
 
@@ -211,7 +249,7 @@ and analogously for all other combinations
 | :--------------- | -----: | -------: | ------: |
 | **TensorFlow 1** |  9.0614 |  -7.8326 | 0.7191 |
 | **JAX Linen**    |  16.074 |  -15.0038  | 0.6738 |
-| **JAX NNX**      |  10.5440 |  -18.9730  | 0.8060 |
+| **JAX NNX**      |  7.9911 |  -7.0799  | 0.7079 |
 <table>
   <tr>
     <th style="text-align:center;">TensorFlow 1</th>
