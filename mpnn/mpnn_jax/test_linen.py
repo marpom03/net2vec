@@ -27,6 +27,9 @@ def evaluate_model(params, model, graphs, batch_size=64, seed=0):
         batch_preds  = model.apply(params, batch_graph).squeeze()
         batch_labels = batch_graph.globals.squeeze()
 
+        batch_preds = batch_preds[:-1]
+        batch_labels = batch_labels[:-1]
+
         preds_list.append(batch_preds)
         labels_list.append(batch_labels)
 
