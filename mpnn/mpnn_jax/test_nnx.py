@@ -28,6 +28,10 @@ def evaluate_model(model_apply, graphs, batch_size=64, seed=0):
         batch_graph, key = next(test_loader)
         batch_preds  = model_apply(batch_graph).squeeze()
         batch_labels = batch_graph.globals.squeeze()
+
+        batch_preds = batch_preds[:-1]
+        batch_labels = batch_labels[:-1]
+        
         preds_list.append(batch_preds); labels_list.append(batch_labels)
 
     preds  = jnp.concatenate(preds_list, axis=0)
