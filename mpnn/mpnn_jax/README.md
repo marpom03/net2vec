@@ -547,6 +547,7 @@ and analogously for all other combinations
 | **JAX NNX**      |  0.0515 | 0.9433 | 0.9768 |
 
 
+
 <table>
   <tr>
     <th style="text-align:center;">TensorFlow 1</th>
